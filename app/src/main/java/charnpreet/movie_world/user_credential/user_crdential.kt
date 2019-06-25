@@ -1,4 +1,4 @@
-package charnpreet.movie_world
+package charnpreet.movie_world.user_credential
 
 /*
 * this class is will be inherted by login and sign up class

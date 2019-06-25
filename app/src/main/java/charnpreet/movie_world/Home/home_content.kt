@@ -1,4 +1,4 @@
-package charnpreet.movie_world
+package charnpreet.movie_world.Home
 
 class home_content {
 
@@ -22,7 +22,7 @@ class home_content {
     // this will return boolean show_fav_collection
     fun show_fav_collection() :Boolean{
 
-        return show_fav_collection;
+        return this.show_fav_collection;
     }
 
     // this will check if toggle is selected

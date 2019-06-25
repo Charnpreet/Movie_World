@@ -1,4 +1,4 @@
-package charnpreet.movie_world
+package charnpreet.movie_world.utility
 /*
 * this class will all the utitility method
 * will have singlton design pattern
