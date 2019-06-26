@@ -15,7 +15,7 @@ import charnpreet.movie_world.model.Movies
 import com.squareup.picasso.Picasso
 
 
-class display_movie_adapter(movies: List<Movies>?, lrowLayout : Int, applicationContext: Context) : RecyclerView.Adapter<display_movie_adapter.MovieDetailHolder>() {
+class display_movie_adapter(movies: List<Movies>?, lrowLayout: Int, applicationContext: Context) : RecyclerView.Adapter<display_movie_adapter.MovieDetailHolder>() {
 
     private var movies: List<Movies>? = movies
     private var rowLayout: Int = lrowLayout
@@ -39,9 +39,9 @@ class display_movie_adapter(movies: List<Movies>?, lrowLayout : Int, application
             .placeholder(android.R.drawable.sym_def_app_icon)
             .error(android.R.drawable.sym_def_app_icon)
             .into(p0.movieImage);
-        p0.movieTitle.setText(movies!!.get(p1).title);
-        p0.releasedate.setText(movies!!.get(p1).releaseDate);
-        p0.movie_language.setText(movies!!.get(p1).originalLanguage);
+        p0.movieTitle.setText("Title:- "+ movies!!.get(p1).title);
+        p0.releasedate.setText("Release Date:- "+movies!!.get(p1).releaseDate);
+        p0.movie_language.setText("Language:- "+movies!!.get(p1).originalLanguage);
 
     }
 
