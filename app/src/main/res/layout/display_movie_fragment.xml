@@ -7,12 +7,13 @@
 
     <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"
-            ads:layout_constraintTop_toTopOf="parent"
             android:id="@+id/collapsingToolbarLayout"
-            android:layout_marginTop="16dp">
+            ads:layout_constraintTop_toTopOf="parent" android:layout_marginTop="100dp"
+            android:layout_marginBottom="20dp" ads:layout_constraintBottom_toTopOf="@+id/display_movies_recylerview"
+            ads:layout_constraintVertical_bias="1.0">
         <SearchView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -26,13 +27,13 @@
 
     <android.support.v7.widget.RecyclerView
 
-            android:layout_height="655dp"
+            android:layout_height="563dp"
             android:id="@+id/display_movies_recylerview"
-            android:layout_width="408dp"
+            android:layout_width="411dp"
             ads:layout_constraintEnd_toEndOf="parent"
             ads:layout_constraintStart_toStartOf="parent"
             ads:layout_constraintHorizontal_bias="0.0"
-            ads:layout_constraintTop_toBottomOf="@+id/collapsingToolbarLayout"
-            ads:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="16dp"/>
+            ads:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="20dp"
+            ads:layout_constraintTop_toBottomOf="@+id/collapsingToolbarLayout"/>
 
 </android.support.constraint.ConstraintLayout>
