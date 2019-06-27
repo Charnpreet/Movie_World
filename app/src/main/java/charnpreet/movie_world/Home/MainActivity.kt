@@ -17,6 +17,7 @@ import android.view.WindowManager
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
 import charnpreet.movie_world.adapter.display_movie_adapter
+import charnpreet.movie_world.fragments.home.home_screen
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import charnpreet.movie_world.movie_db_connect.API
@@ -27,26 +28,21 @@ import retrofit2.Response
 import android.support.v7.widget.RecyclerView as RecyclerView1
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-   lateinit  var recyclerView: RecyclerView1;
     lateinit var toolbar: Toolbar;
     lateinit var drawerLayout: DrawerLayout;
     lateinit var navView: NavigationView;
-    //private var movies:  List<Movies>? = null
-    private lateinit var linearLayoutManager: LinearLayoutManager;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         init_variables();
-        initRecylerView();
         setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
-
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
@@ -55,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // this will make sure when apps is open
         // top rated movies loaded automatically on home screen
         //
-       // load_Top_Movies();
+        load_home_screen_Fragment();
     }
 
     override fun onBackPressed() {
@@ -73,6 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+
         return true
     }
 
@@ -90,11 +87,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_home -> {
-            //    load_Top_Movies();
+                load_home_screen_Fragment()
 
             }
             R.id.nav_gallery -> {
-                loading_user_search_screen();
+                loading_user_search_screen()
             }
             R.id.nav_slideshow -> {
 
@@ -107,53 +104,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
         }
+
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    //
-    // below method is used to laod top rated movies movie_db
-    private fun load_Top_Movies(){
-        API.search_In_Movies().topRated(Movie_db_config.API_KEY).enqueue(object: Callback<MoviesResponse>{
-            override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
-                passingdatatorecyerview(call,response);
-            }
-
-            override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
-                Log.i("hello", "failed to load data");
-            }
-
-        })
-    }
-
-
-
-        // this mehthod is used to pass data to recyerview holder
-        // it deserilsed the retrofit response into an object
-        private fun passingdatatorecyerview(call: Call<MoviesResponse>?,response: Response<MoviesResponse>?)
-        {
-            if (call != null) {
-                var  movies: List<Movies>? = response!!.body().results;
-                recyclerView!!.adapter = display_movie_adapter(movies, R.layout.display_movie_recylerview_holder, applicationContext);
-//
-            }
-        }
-
-    //
-    // init recyler view holder
-    private fun initRecylerView(){
-        recyclerView = findViewById(R.id.display_movies_recylerview1);
-
-        if(recyclerView!=null){
-            linearLayoutManager = LinearLayoutManager(this);
-            recyclerView!!.layoutManager = linearLayoutManager
-        }
-        else {
-            Log.i("hello", "error ataching recyler View ");
-        }
-
-}
     // init all other variables
     private fun init_variables(){
 
@@ -169,10 +126,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val search_movies: search_in_movies = search_in_movies.newInstance();
         val fragmentManager: FragmentManager = supportFragmentManager;
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.drawer_layout, search_movies);
+        fragmentTransaction.replace(R.id.fragment_container, search_movies);
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.commit();
+    }
 
+    private fun load_home_screen_Fragment(){
+        val home_screen: home_screen = home_screen.newInstance();
+        val fragmentManager: FragmentManager = supportFragmentManager;
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, home_screen);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
     }
 }
