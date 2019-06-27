@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
+import android.view.WindowManager
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
 import charnpreet.movie_world.adapter.display_movie_adapter
@@ -49,11 +50,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         //
         // this will make sure when apps is open
         // top rated movies loaded automatically on home screen
         //
-        load_Top_Movies();
+       // load_Top_Movies();
     }
 
     override fun onBackPressed() {
@@ -88,12 +90,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_home -> {
-                load_Top_Movies();
+            //    load_Top_Movies();
 
             }
             R.id.nav_gallery -> {
                 loading_user_search_screen();
-                userquery_movie_result();
             }
             R.id.nav_slideshow -> {
 
@@ -125,27 +126,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         })
     }
-    //userquery:String
-    private fun userquery_movie_result(){
-
-        API.search_In_Movies().search(Movie_db_config.API_KEY, "dilwale dulhania le jayenge").enqueue(object : Callback<MoviesResponse>{
-            override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
-                if(call!=null){
-                    //
-                    passingdatatorecyerview(call,response);
-                }
-            }
-            //
-            // to do can make it more user friendly
-            // can print error on user screen or to write to log file
-            override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
-                Log.i("hello", "failed to load data");
-            }
 
 
-        })
-
-    }
 
         // this mehthod is used to pass data to recyerview holder
         // it deserilsed the retrofit response into an object
@@ -165,7 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if(recyclerView!=null){
             linearLayoutManager = LinearLayoutManager(this);
-            recyclerView!!.layoutManager = linearLayoutManager as android.support.v7.widget.RecyclerView.LayoutManager?;
+            recyclerView!!.layoutManager = linearLayoutManager
         }
         else {
             Log.i("hello", "error ataching recyler View ");
