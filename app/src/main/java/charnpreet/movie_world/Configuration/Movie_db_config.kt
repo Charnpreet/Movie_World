@@ -7,7 +7,7 @@ class Movie_db_config {
     {
         val IMAGE_URL_BASE_PATH = "http://image.tmdb.org/t/p/w342//"
         val  API_BASE_URL = "http://api.themoviedb.org/3/"
-        val API_KEY =  "REPLACE ME WITH YOUR API KEY"
+        val API_KEY =  "0d9396afae9f4fe7bae0ce653bbee985" //"REPLACE ME WITH YOUR API KEY"
     }
 
 }

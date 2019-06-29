@@ -1,17 +1,21 @@
 package charnpreet.movie_world.utility
+
+import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
+
 /*
 * this class will all the utitility method
 * will have singlton design pattern
 * therefore will share only 1 instance of an object accross all activities
 * */
-class utility {
-
-var utility_instance : utility? = null
+class utility{
+    companion object{
+        val utility_instance =utility();
+    }
 
     // this will trim passed in string
     // for slaces and spaces
     fun trim_data(trim_me: String):String{
-
 
     return trim_me;
     }
@@ -25,18 +29,16 @@ var utility_instance : utility? = null
         return input_string;
     }
 
-    // this will must return utility instance
     //
-    fun get_utility_instance(): utility
-    {
+    // will return passed scroll view for layoutmanager
+    // it has been used with recyler view
+    //
+     fun scroll_view_for_recylerView_layoutmanager(context: Context, layoutStyle:Int): LinearLayoutManager {
 
-        if(utility_instance==null)
-        {
-
-            utility_instance = utility();
-
-        }
-        return utility_instance as utility;
+        return LinearLayoutManager(context, layoutStyle,false);
     }
+
+
+
 
 }
