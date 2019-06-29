@@ -1,6 +1,8 @@
 package charnpreet.movie_world.fragments.home
 
+import android.opengl.Visibility
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -8,24 +10,33 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.ProgressBar
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
-import charnpreet.movie_world.adapter.display_movie_adapter
-import charnpreet.movie_world.fragments.search.search_in_movies
+import charnpreet.movie_world.adapter.Home_screen_adapter
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class home_screen: Fragment() {
 
+    val TOP_RATED_MOVIES   = 0
+    val POPULAR_MOVIES     = 1
+    val UPCOMING_MOVIES    = 2
+    val NOW_PLAYING_MOVIES = 3
+    val utility: utility = charnpreet.movie_world.utility.utility.utility_instance;
     lateinit var  v : View
-    lateinit var recyclerView_for_toprated_movies: RecyclerView
-    lateinit var recyclerView_for_fav_collection: RecyclerView
-    private lateinit var linearLayoutManager_for_fav_collection: LinearLayoutManager;
-    private lateinit var linearLayoutManager_for_toprated_movies: LinearLayoutManager;
+    lateinit var recyclerView: RecyclerView
+    private lateinit var linearLayoutManager: LinearLayoutManager;
+    private  var maps:  MutableMap<Int,List<Movies>?> = mutableMapOf<Int,List<Movies>?>()
+    private lateinit var progressbar: ProgressBar;
 
     companion object{
         fun newInstance(): home_screen {
@@ -33,35 +44,68 @@ class home_screen: Fragment() {
         }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        v= inflater.inflate(R.layout.home_screen_fragment, container,false);
+        v= inflater.inflate(R.layout.home_screen, container,false);
+
         init();
         return v;
     }
 private fun init(){
+    progressbar = v.findViewById(R.id.pbHeaderProgress);
     init_recylerView();
-    load_Top_Movies();
+    Load_Movie_Categories()
+    // temp freezing main thread to load all data from server
+    // not a good option, need to replace with Rxjava Observable and Zip methods
+    HoldingMainThreadUnitlDataIsLoaded()
 
 }
     private fun init_recylerView(){
-        recyclerView_for_fav_collection = v.findViewById(R.id.fav_collection_recyler_view);
-        recyclerView_for_toprated_movies = v.findViewById(R.id.display_movies_recylerview1);
-        linearLayoutManager_for_toprated_movies = Horizontal_scroll_view_for_recylerView_layoutmanager()
-        linearLayoutManager_for_fav_collection = Horizontal_scroll_view_for_recylerView_layoutmanager()
-        recyclerView_for_fav_collection .layoutManager = linearLayoutManager_for_fav_collection
-        recyclerView_for_toprated_movies.layoutManager=linearLayoutManager_for_toprated_movies
+        recyclerView = v.findViewById(R.id.home_screen);
+        linearLayoutManager = utility.scroll_view_for_recylerView_layoutmanager(v.context,LinearLayoutManager.VERTICAL);
+        recyclerView.layoutManager=linearLayoutManager
 
     }
-    //
-    // will return horizontal scroll view for layoutmanager
-    private fun Horizontal_scroll_view_for_recylerView_layoutmanager(): LinearLayoutManager {
-        return LinearLayoutManager(v.context, LinearLayoutManager.HORIZONTAL,false);
+    private fun Load_Movie_Categories(){
+        load_TopRated_Movies()
+        load_Popular_movies()
+        load_Now_Playing_movies()
+        load_Upcoming_movies()
+
+
+        //Log.i("hello", maps.size.toString())
     }
-    //
+
     // below method is used to laod top rated movies movie_db
-    private fun load_Top_Movies(){
-        API.search_In_Movies().topRated(Movie_db_config.API_KEY).enqueue(object: Callback<MoviesResponse> {
+
+    private fun load_TopRated_Movies(){
+        val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY)
+        loadMovieCategories(call, TOP_RATED_MOVIES)
+
+    }
+
+    private fun load_Popular_movies(){
+        val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY)
+        loadMovieCategories(call, POPULAR_MOVIES)
+
+    }
+    private fun load_Now_Playing_movies(){
+        val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY)
+        loadMovieCategories(call, NOW_PLAYING_MOVIES)
+    }
+    private fun load_Upcoming_movies(){
+        val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY)
+        loadMovieCategories(call, UPCOMING_MOVIES)
+    }
+
+    //
+    //
+    private fun loadMovieCategories(call: Call<MoviesResponse>?, index:Int){
+        call!!.enqueue(object: Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
-                passingdatatorecyerview(call,response);
+                if(response!!.isSuccessful){
+                    Log.i("hello", "hello world");
+                    passingdatatorecyerview(call,response,index);
+                }
+
             }
 
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
@@ -71,14 +115,29 @@ private fun init(){
         })
     }
 
-    // this mehthod is used to pass data to recyerview holder
-    // it deserilsed the retrofit response into an object
-    private fun passingdatatorecyerview(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?)
+  //   this mehthod is used to pass data to recyerview holder
+  //   it deserilsed the retrofit response into an object
+
+    private fun passingdatatorecyerview(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?,index:Int)
     {
         if (call != null) {
             var  movies: List<Movies>? = response!!.body().results;
-            recyclerView_for_toprated_movies!!.adapter = display_movie_adapter(movies, R.layout.display_movie_recylerview_holder, v.context);
-//
+            maps.put(index,movies);
+//            recyclerView!!.adapter = Home_screen_adapter(maps);
+
         }
+    }
+
+
+    // temp freezing main thread to load all data from server
+    // not a good option, need to replace with Rxjava Observable and Zip methods
+    fun HoldingMainThreadUnitlDataIsLoaded() {
+        val handler = Handler()
+        val runnable = Runnable {
+            recyclerView!!.adapter = Home_screen_adapter(maps);
+            progressbar.setVisibility(View.INVISIBLE)
+        }
+
+        handler.postDelayed(runnable, 10000)
     }
 }

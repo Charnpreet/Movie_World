@@ -39,25 +39,23 @@ class display_movie_adapter(movies: List<Movies>?, lrowLayout: Int, applicationC
             .placeholder(android.R.drawable.sym_def_app_icon)
             .error(android.R.drawable.sym_def_app_icon)
             .into(p0.movieImage);
-        p0.movieTitle.setText("Title:- "+ movies!!.get(p1).title);
-        p0.releasedate.setText("Release Date:- "+movies!!.get(p1).releaseDate);
-        p0.movie_language.setText("Language:- "+movies!!.get(p1).originalLanguage);
+        p0.movieTitle.setText( movies!!.get(p1).title);
+        //
+        // implementing onclick listener
+        //
+        p0.movieImage.setOnClickListener(View.OnClickListener {
+            Log.i("hello","you clicked an image");
+        })
 
     }
 
 
-    class  MovieDetailHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class  MovieDetailHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var layout :ConstraintLayout = itemView.findViewById(R.id.list_item_movie);
-        var movieTitle: TextView = itemView.findViewById(R.id.movie_title_movie_view_holder);
-        var movie_language: TextView = itemView.findViewById(R.id.language_movie_view_holder);
-        var movieDescription: TextView? = null
-        var releasedate: TextView = itemView.findViewById(R.id.realse_date_movie_view_holder);
-        var movieImage: ImageView = itemView.findViewById(R.id.image_view_display_movie_view_holder);
+        val layout: ConstraintLayout = itemView.findViewById(R.id.list_item_movie);
+        val movieTitle: TextView = itemView.findViewById(R.id.movie_title_movie_view_holder);
+        val movieDescription: TextView? = null
+        val movieImage: ImageView = itemView.findViewById(R.id.image_view_display_movie_view_holder);
 
-        override fun onClick(p0: View?) {
-            Log.i("hello", "CLICK!")
-        }
     }
-
 }

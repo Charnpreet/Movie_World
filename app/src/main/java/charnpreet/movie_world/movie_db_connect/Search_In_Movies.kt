@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.*
 
 
 interface Search_In_Movies {
@@ -27,4 +28,15 @@ interface Search_In_Movies {
 //    @GET("/movie/{id}/images")
 //    fun movieImages(@Query("api_key") apiKey: String, @Path("id") movieID: Int): Call<ImagesResponse>
 
+    //    //Popular MOVIES
+    @GET("movie/popular")
+    fun popularMovies(@Query("api_key") apiKey: String): Call<MoviesResponse>
+
+    //    //Now Playing MOVIES
+    @GET("movie/now_playing")
+    fun nowPlaying(@Query("api_key") apiKey: String): Call<MoviesResponse>
+
+    //    //Upcoming MOVIES
+    @GET("movie/upcoming")
+    fun upComing(@Query("api_key") apiKey: String): Call<MoviesResponse>
 }
