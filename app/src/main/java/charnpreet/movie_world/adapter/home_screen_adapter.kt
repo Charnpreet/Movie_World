@@ -17,12 +17,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.os.Handler;
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import charnpreet.movie_world.model.Countries
 
 //
 // this class will act as holder to holder list adaptera
 // besically it will present verticall list and each item of list can scroll horizontally
 //
-class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>): RecyclerView.Adapter<Home_screen_adapter.Home_screen_view_holder>() {
+class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>, countries: Array<Countries>): RecyclerView.Adapter<Home_screen_adapter.Home_screen_view_holder>() {
 
     val TOP_RATED_MOVIES = "Top Rated Movies"
     val POPULAR_MOVIES  =  "Popular Movies"
@@ -32,8 +35,7 @@ class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>): RecyclerView.
 
     private var movies: MutableMap<Int,List<Movies>?> = movies
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance;
-    // List of view Pool
-    private val viewPool = RecyclerView.RecycledViewPool()
+    var countries:List<Countries> =countries.toList()
     lateinit var view:View
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): Home_screen_view_holder {
@@ -73,12 +75,19 @@ class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>): RecyclerView.
             p0.textView.setText(NOW_PLAYING_MOVIES)
             p0.recyclerView.adapter = Home_Screen_Movies_adapter(movies[3])
         }
+        p0.spinner.adapter= ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_dropdown_item, p0.countryOption)
 
     }
 
     class Home_screen_view_holder(item: View):RecyclerView.ViewHolder(item){
+        val v :View = item
         val recyclerView: RecyclerView = item.findViewById(R.id.display_movies_recylerview1)
         val textView:TextView = item.findViewById(R.id.text_view_top_movies)
+        var spinner : Spinner = item.findViewById(R.id.spinner_home_Screen_fragment)
+        var countryOption: Array<String> = arrayOf("Filter","India","Australia","Pakistan");
+
+
+
 
     }
 

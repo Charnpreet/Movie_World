@@ -1,5 +1,6 @@
 package charnpreet.movie_world.movie_db_connect
 
+import charnpreet.movie_world.model.Countries
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import retrofit2.Call
@@ -18,7 +19,7 @@ interface Search_In_Movies {
 
 //    //TOP RATED MOVIES
     @GET("movie/top_rated")
-    fun topRated(@Query("api_key") apiKey: String): Call<MoviesResponse>
+    fun topRated(@Query("api_key") apiKey: String, @Query("region") region: String): Call<MoviesResponse>
 //
 //    //MOVIE DETAIL
     @GET("/3/movie/{id}")
@@ -30,13 +31,16 @@ interface Search_In_Movies {
 
     //    //Popular MOVIES
     @GET("movie/popular")
-    fun popularMovies(@Query("api_key") apiKey: String): Call<MoviesResponse>
+    fun popularMovies(@Query("api_key") apiKey: String, @Query("region") region: String): Call<MoviesResponse>
 
     //    //Now Playing MOVIES
     @GET("movie/now_playing")
-    fun nowPlaying(@Query("api_key") apiKey: String): Call<MoviesResponse>
+    fun nowPlaying(@Query("api_key")apiKey: String, @Query("region") region: String ): Call<MoviesResponse>
 
     //    //Upcoming MOVIES
     @GET("movie/upcoming")
-    fun upComing(@Query("api_key") apiKey: String): Call<MoviesResponse>
+    fun upComing(@Query("api_key") apiKey: String, @Query("region") region: String): Call<MoviesResponse>
+    //    //Upcoming MOVIES
+    @GET("configuration/countries")
+    fun countries(@Query("api_key") apiKey: String): Call<Array<Countries>>
 }
