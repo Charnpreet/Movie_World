@@ -15,6 +15,7 @@ import android.widget.ProgressBar
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
 import charnpreet.movie_world.adapter.Home_screen_adapter
+import charnpreet.movie_world.model.Countries
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import charnpreet.movie_world.movie_db_connect.API
@@ -37,6 +38,8 @@ class home_screen: Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager;
     private  var maps:  MutableMap<Int,List<Movies>?> = mutableMapOf<Int,List<Movies>?>()
     private lateinit var progressbar: ProgressBar;
+    private var countries:Array<Countries> =arrayOf();
+
 
     companion object{
         fun newInstance(): home_screen {
@@ -53,6 +56,9 @@ private fun init(){
     progressbar = v.findViewById(R.id.pbHeaderProgress);
     init_recylerView();
     Load_Movie_Categories()
+
+    load_countries()
+
     // temp freezing main thread to load all data from server
     // not a good option, need to replace with Rxjava Observable and Zip methods
     HoldingMainThreadUnitlDataIsLoaded()
@@ -67,7 +73,7 @@ private fun init(){
     private fun Load_Movie_Categories(){
         load_TopRated_Movies()
         load_Popular_movies()
-        load_Now_Playing_movies()
+       load_Now_Playing_movies()
         load_Upcoming_movies()
 
 
@@ -77,24 +83,41 @@ private fun init(){
     // below method is used to laod top rated movies movie_db
 
     private fun load_TopRated_Movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY)
+        val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, "IN")
         loadMovieCategories(call, TOP_RATED_MOVIES)
 
     }
 
     private fun load_Popular_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY)
+        val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,"IN")
         loadMovieCategories(call, POPULAR_MOVIES)
 
     }
     private fun load_Now_Playing_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY)
+        val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, "IN")
         loadMovieCategories(call, NOW_PLAYING_MOVIES)
     }
     private fun load_Upcoming_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY)
+        val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, "IN")
         loadMovieCategories(call, UPCOMING_MOVIES)
     }
+    private fun load_countries(){
+        val call: Call<Array<Countries>> = API.search_In_Movies().countries(Movie_db_config.API_KEY)
+       call.enqueue(object :Callback<Array<Countries>>{
+           override fun onResponse(call: Call<Array<Countries>>?, response: Response<Array<Countries>>?) {
+
+               if (call != null) {
+                   countries= response!!.body()
+               }
+           }
+
+           override fun onFailure(call: Call<Array<Countries>>?, t: Throwable?) {
+
+           }
+       })
+    }
+
+
 
     //
     //
@@ -102,14 +125,16 @@ private fun init(){
         call!!.enqueue(object: Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
                 if(response!!.isSuccessful){
-                    Log.i("hello", "hello world");
+                    Log.i("hello", call!!.request().toString());
                     passingdatatorecyerview(call,response,index);
                 }
 
             }
 
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
+                Log.i("hello", call!!.request().toString());
                 Log.i("hello", "failed to load data");
+                progressbar.setVisibility(View.INVISIBLE)
             }
 
         })
@@ -134,10 +159,9 @@ private fun init(){
     fun HoldingMainThreadUnitlDataIsLoaded() {
         val handler = Handler()
         val runnable = Runnable {
-            recyclerView!!.adapter = Home_screen_adapter(maps);
+            recyclerView!!.adapter = Home_screen_adapter(maps,countries);
             progressbar.setVisibility(View.INVISIBLE)
         }
-
-        handler.postDelayed(runnable, 10000)
+        handler.postDelayed(runnable, 5000)
     }
 }

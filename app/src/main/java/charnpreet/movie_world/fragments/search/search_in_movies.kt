@@ -64,7 +64,6 @@ class search_in_movies : Fragment(){
         search_view.setOnQueryTextListener(object :android.widget.SearchView.OnQueryTextListener{
            override fun onQueryTextSubmit(query:String):Boolean{
                fetech_searchView_data(query);
-               Log.i("hello", query);
                return false;
            }
 
@@ -89,13 +88,8 @@ class search_in_movies : Fragment(){
             Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
                 if(call!=null){
-                    //
-                    if (call != null) {
                         var  movies: List<Movies>? = response!!.body().results;
-                        Log.i("helllo", movies!!.size.toString())
                         recyclerView_for_search_movies!!.adapter = display_movie_adapter(movies, R.layout.display_movie_recylerview_holder, v.context);
-//
-                    }
 
                 }
             }
@@ -103,7 +97,9 @@ class search_in_movies : Fragment(){
             // to do can make it more user friendly
             // can print error on user screen or to write to log file
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
-                Log.i("hello", "failed to load data");
+                Log.i("hello", call!!.request().toString());
+                Log.i("hello", t!!.localizedMessage);
+
             }
 
 

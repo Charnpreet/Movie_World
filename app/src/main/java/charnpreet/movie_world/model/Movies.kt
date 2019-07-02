@@ -2,8 +2,9 @@ package charnpreet.movie_world.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class Movies {
+class Movies: Serializable {
     @SerializedName("poster_path")
     @Expose
     var posterPath: String
@@ -26,7 +27,7 @@ class Movies {
         }
     @SerializedName("overview")
     @Expose
-    private var overview: String? = null
+    var overview: String? = null
         //  getter
         get() = field
         // setter
@@ -84,7 +85,7 @@ class Movies {
 
     @SerializedName("backdrop_path")
     @Expose
-    private var backdropPath: String? = null
+     var backdropPath: String? = null
         //  getter
         get() = field
         // setter

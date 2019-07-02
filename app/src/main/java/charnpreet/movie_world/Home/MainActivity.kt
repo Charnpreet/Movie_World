@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     //
     private fun loading_user_search_screen(){
         val search_movies: search_in_movies = search_in_movies.newInstance();
-        val fragmentManager: FragmentManager = supportFragmentManager;
+        val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, search_movies);
         fragmentTransaction.addToBackStack(null);
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun load_home_screen_Fragment(){
         val home_screen: home_screen = home_screen.newInstance();
-        val fragmentManager: FragmentManager = supportFragmentManager;
+        val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, home_screen);
         fragmentTransaction.addToBackStack(null);
