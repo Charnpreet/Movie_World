@@ -1,5 +1,6 @@
 package charnpreet.movie_world.fragments.home
 
+import android.content.Context
 import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
@@ -125,7 +126,7 @@ private fun init(){
         call!!.enqueue(object: Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
                 if(response!!.isSuccessful){
-                    Log.i("hello", call!!.request().toString());
+                   // Log.i("hello", call!!.request().toString());
                     passingdatatorecyerview(call,response,index);
                 }
 

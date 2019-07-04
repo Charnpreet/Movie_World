@@ -1,7 +1,13 @@
 package charnpreet.movie_world.utility
 
 import android.content.Context
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import charnpreet.movie_world.R
+import charnpreet.movie_world.fragments.content_details.Content_details
 
 /*
 * this class will all the utitility method
@@ -38,6 +44,19 @@ class utility{
         return LinearLayoutManager(context, layoutStyle,false);
     }
 
+    fun loadFragment(fragmentManager: FragmentManager,fragmenttobeLoaded: Fragment, addtobackstack:Boolean){
+
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragmenttobeLoaded);
+        if(addtobackstack){
+            // the add
+
+        }else{
+            fragmentTransaction.addToBackStack(null);
+        }
+
+        fragmentTransaction.commit();
+    }
 
 
 

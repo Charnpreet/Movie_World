@@ -44,9 +44,9 @@ class Content_details(): Fragment() {
 
     private fun init(){
         poster = v.findViewById(R.id.content_detail_poster_view);
-        cancel_button=v.findViewById(R.id.content_detail_cancel_button);
-        overView=v.findViewById(R.id.content_detail_movie_overview)
-        releaseDate=v.findViewById(R.id.relase_date);
+      //  cancel_button=v.findViewById(R.id.content_detail_cancel_button);
+      //  overView=v.findViewById(R.id.content_detail_movie_overview)
+        releaseDate=v.findViewById(R.id.content_detail_relase_date);
         popularity=v.findViewById(R.id.content_detail_popularity)
         ExtractBundle()
         push_content()
@@ -58,14 +58,14 @@ class Content_details(): Fragment() {
         movies = movie
     }
     private fun push_content(){
-        var image_url : String = Movie_db_config.IMAGE_URL_BASE_PATH + movies.posterPath
+        var image_url : String = Movie_db_config.IMAGE_URL_BASE_PATH + movies.backdropPath
         Picasso.with(context)
             .load(image_url)
             .placeholder(android.R.drawable.sym_def_app_icon)
             .error(android.R.drawable.sym_def_app_icon)
             .into(poster)
 
-        overView.setText("OverView:- " + movies.overview )
+      //  overView.setText("OverView:- " + movies.overview )
 
         releaseDate.setText("Release Date:- " + movies.releaseDate)
 

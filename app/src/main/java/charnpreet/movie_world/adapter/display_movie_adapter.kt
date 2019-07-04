@@ -20,6 +20,7 @@ import charnpreet.movie_world.fragments.home.home_screen
 import charnpreet.movie_world.model.Movies
 import com.squareup.picasso.Picasso
 import android.support.v7.app.AppCompatActivity
+import charnpreet.movie_world.utility.utility
 import java.io.Serializable
 
 
@@ -64,10 +65,8 @@ class display_movie_adapter(movies: List<Movies>?, lrowLayout: Int, applicationC
         var content_details: Content_details = Content_details.newInstance(movie);
         val activity :AppCompatActivity = context as AppCompatActivity
         val fragmentManager: FragmentManager =activity.supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, content_details);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        val utility: utility = utility.utility_instance
+        utility.loadFragment(fragmentManager,content_details,false)
 
     }
 
