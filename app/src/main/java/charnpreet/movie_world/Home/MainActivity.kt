@@ -22,6 +22,7 @@ import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import charnpreet.movie_world.movie_db_connect.API
 import charnpreet.movie_world.fragments.search.search_in_movies
+import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var toolbar: Toolbar;
     lateinit var drawerLayout: DrawerLayout;
     lateinit var navView: NavigationView;
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+       window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         //
         // this will make sure when apps is open
         // top rated movies loaded automatically on home screen
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
 
-        return true
+        return false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -105,7 +105,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -119,25 +118,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView= findViewById(R.id.nav_view)
     }
 
+    // utility instance
+    val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
+    // fragment manager used to load fragments
+    val fragmentManager: FragmentManager = supportFragmentManager
     //
     // this will load search_movie fragment
     //
     private fun loading_user_search_screen(){
         val search_movies: search_in_movies = search_in_movies.newInstance();
-        val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, search_movies);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        utility.loadFragment(fragmentManager,search_movies,false)
     }
 
     private fun load_home_screen_Fragment(){
         val home_screen: home_screen = home_screen.newInstance();
-        val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, home_screen);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        utility.loadFragment(fragmentManager,home_screen,false)
 
     }
 }
