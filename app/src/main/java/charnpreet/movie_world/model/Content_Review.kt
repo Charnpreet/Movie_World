@@ -1,24 +1,13 @@
 package charnpreet.movie_world.model
-
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class Content_Review : Serializable {
 
-    @SerializedName("review")
-    @Expose
-    var review: String
-        //  getter
-        get() = field
-        // setter
-        set(value) {
-            field = value
-        }
-
     @SerializedName("id")
     @Expose
-    private var id: Int = 0
+     var id: Int = 0
         //  getter
         get() = field
         // setter
@@ -35,15 +24,17 @@ class Content_Review : Serializable {
         set(value) {
             field = value
         }
-    @SerializedName("total_results")
+
+    @SerializedName("results")
     @Expose
-    private var totalResults: Int = 0
+    var results: List<reviewDetails>? = null
         //  getter
         get() = field
         // setter
         set(value) {
             field = value
         }
+
 
     @SerializedName("total_pages")
     @Expose
@@ -55,10 +46,29 @@ class Content_Review : Serializable {
             field = value
         }
 
-    constructor(review:String, id:Int, page: Int, totalResult: Int, totalPages: Int){
-        this.review = review
+
+    @SerializedName("total_results")
+    @Expose
+    private var totalResults: Int = 0
+        //  getter
+        get() = field
+        // setter
+        set(value) {
+            field = value
+        }
+
+    constructor(id:Int, page: Int, results: List<reviewDetails>?,totalPages: Int, totalResult: Int){
+        this.results = results
         this.totalPages = totalPages
         this.totalResults = totalResults
         this.id = id
+    }
+    override fun toString(): String {
+        return "Content_Review{" +
+                "page=" + page +
+                ", results=" + results +
+                ", totalResults=" + totalResults +
+                ", totalPages=" + totalPages +
+                '}'.toString()
     }
 }

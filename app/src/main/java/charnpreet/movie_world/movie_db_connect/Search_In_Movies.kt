@@ -1,8 +1,6 @@
 package charnpreet.movie_world.movie_db_connect
 
-import charnpreet.movie_world.model.Countries
-import charnpreet.movie_world.model.Movies
-import charnpreet.movie_world.model.MoviesResponse
+import charnpreet.movie_world.model.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -43,4 +41,13 @@ interface Search_In_Movies {
     //    //Upcoming MOVIES
     @GET("configuration/countries")
     fun countries(@Query("api_key") apiKey: String): Call<Array<Countries>>
+
+    // movie Reviews
+    @GET("movie/{id}/reviews")
+    fun contentReviews( @Path("id") movieID :Int?, @Query("api_key")apiKey: String): Call<Content_Review>
+
+    // movie Trailer and Teaser
+    @GET("movie/{id}/videos")
+    fun contentVideo(@Path("id") movieID :Int?, @Query("api_key")apiKey: String):Call<ContentVideo>
+
 }

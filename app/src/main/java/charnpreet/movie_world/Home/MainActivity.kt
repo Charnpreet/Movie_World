@@ -7,26 +7,14 @@ import android.view.MenuItem
 import android.support.v4.widget.DrawerLayout
 import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
-import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
-import charnpreet.movie_world.adapter.display_movie_adapter
 import charnpreet.movie_world.fragments.home.home_screen
-import charnpreet.movie_world.model.Movies
-import charnpreet.movie_world.model.MoviesResponse
-import charnpreet.movie_world.movie_db_connect.API
 import charnpreet.movie_world.fragments.search.search_in_movies
 import charnpreet.movie_world.utility.utility
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import android.support.v7.widget.RecyclerView as RecyclerView1
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var toolbar: Toolbar;

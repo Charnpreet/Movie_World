@@ -2,13 +2,11 @@ package charnpreet.movie_world.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+class reviewDetails {
 
-
-class MoviesResponse {
-
-    @SerializedName("page")
+    @SerializedName("author")
     @Expose
-    private var page: Int = 0
+    private var author: String? =null
         //  getter
         get() = field
         // setter
@@ -16,9 +14,9 @@ class MoviesResponse {
             field = value
         }
 
-    @SerializedName("results")
+    @SerializedName("content")
     @Expose
-    var results: List<Movies>? = null
+     var content: String? =null
         //  getter
         get() = field
         // setter
@@ -26,9 +24,9 @@ class MoviesResponse {
             field = value
         }
 
-    @SerializedName("total_results")
+    @SerializedName("id")
     @Expose
-    private var totalResults: Int = 0
+    var id: String
         //  getter
         get() = field
         // setter
@@ -36,9 +34,9 @@ class MoviesResponse {
             field = value
         }
 
-    @SerializedName("total_pages")
+    @SerializedName("url")
     @Expose
-    private var totalPages: Int = 0
+    private var url: String? =null
         //  getter
         get() = field
         // setter
@@ -46,12 +44,10 @@ class MoviesResponse {
             field = value
         }
 
-    override fun toString(): String {
-        return "MoviesResponse{" +
-                "page=" + page +
-                ", results=" + results +
-                ", totalResults=" + totalResults +
-                ", totalPages=" + totalPages +
-                '}'.toString()
+    constructor(author:String, content:String,id:String, url : String){
+        this.author=author
+        this.content=content
+        this.id=id
+        this.url=url
     }
 }
