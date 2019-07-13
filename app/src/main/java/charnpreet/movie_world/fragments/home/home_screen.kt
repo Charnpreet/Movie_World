@@ -1,21 +1,17 @@
 package charnpreet.movie_world.fragments.home
 
-import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.ProgressBar
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
-import charnpreet.movie_world.adapter.Home_screen_adapter
+import charnpreet.movie_world.adapter.HomeScreen.Home_screen_adapter
 import charnpreet.movie_world.model.Countries
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
@@ -24,8 +20,6 @@ import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
-import kotlin.collections.ArrayList
 
 class home_screen: Fragment() {
 
@@ -53,12 +47,14 @@ class home_screen: Fragment() {
         init();
         return v;
     }
+
+
 private fun init(){
     progressbar = v.findViewById(R.id.pbHeaderProgress);
     init_recylerView();
     Load_Movie_Categories()
 
-    load_countries()
+   // load_countries()
 
     // temp freezing main thread to load all data from server
     // not a good option, need to replace with Rxjava Observable and Zip methods
@@ -74,7 +70,7 @@ private fun init(){
     private fun Load_Movie_Categories(){
         load_TopRated_Movies()
         load_Popular_movies()
-       load_Now_Playing_movies()
+        load_Now_Playing_movies()
         load_Upcoming_movies()
 
 
@@ -126,15 +122,14 @@ private fun init(){
         call!!.enqueue(object: Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
                 if(response!!.isSuccessful){
-                   // Log.i("hello", call!!.request().toString());
+
                     passingdatatorecyerview(call,response,index);
                 }
 
             }
 
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
-                Log.i("hello", call!!.request().toString());
-                Log.i("hello", "failed to load data");
+
                 progressbar.setVisibility(View.INVISIBLE)
             }
 
@@ -158,11 +153,14 @@ private fun init(){
     // temp freezing main thread to load all data from server
     // not a good option, need to replace with Rxjava Observable and Zip methods
     fun HoldingMainThreadUnitlDataIsLoaded() {
+
         val handler = Handler()
         val runnable = Runnable {
-            recyclerView!!.adapter = Home_screen_adapter(maps,countries);
+
+            recyclerView!!.adapter = Home_screen_adapter(maps, countries)
+
             progressbar.setVisibility(View.INVISIBLE)
         }
-        handler.postDelayed(runnable, 5000)
+        handler.postDelayed(runnable, 10000)
     }
 }

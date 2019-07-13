@@ -3,7 +3,7 @@ package charnpreet.movie_world.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Countries {
+class Countries  {
     @SerializedName("iso_3166_1")
     @Expose
      var iso_3166_1 :String

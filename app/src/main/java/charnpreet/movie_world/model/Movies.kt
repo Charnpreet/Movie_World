@@ -51,7 +51,7 @@ class Movies: Serializable {
 
     @SerializedName("id")
     @Expose
-    private var id: Int? = null
+     var id: Int? = null
 
     @SerializedName("original_title")
     @Expose
@@ -115,7 +115,7 @@ class Movies: Serializable {
 
     @SerializedName("video")
     @Expose
-    private var video: Boolean? = null
+     var video: Boolean? = null
         //  getter
         get() = field
 
