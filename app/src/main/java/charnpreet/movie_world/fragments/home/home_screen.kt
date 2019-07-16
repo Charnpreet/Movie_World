@@ -27,31 +27,31 @@ class home_screen: Fragment() {
     val POPULAR_MOVIES     = 1
     val UPCOMING_MOVIES    = 2
     val NOW_PLAYING_MOVIES = 3
-    val utility: utility = charnpreet.movie_world.utility.utility.utility_instance;
+    val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
     lateinit var  v : View
     lateinit var recyclerView: RecyclerView
-    private lateinit var linearLayoutManager: LinearLayoutManager;
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private  var maps:  MutableMap<Int,List<Movies>?> = mutableMapOf<Int,List<Movies>?>()
-    private lateinit var progressbar: ProgressBar;
-    private var countries:Array<Countries> =arrayOf();
+    private lateinit var progressbar: ProgressBar
+    private var countries:Array<Countries> =arrayOf()
 
 
     companion object{
         fun newInstance(): home_screen {
-            return home_screen();
+            return home_screen()
         }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.home_screen, container,false);
 
-        init();
-        return v;
+        init()
+        return v
     }
 
 
 private fun init(){
-    progressbar = v.findViewById(R.id.pbHeaderProgress);
-    init_recylerView();
+    progressbar = v.findViewById(R.id.pbHeaderProgress)
+    init_recylerView()
     Load_Movie_Categories()
 
    // load_countries()
@@ -62,7 +62,7 @@ private fun init(){
 
 }
     private fun init_recylerView(){
-        recyclerView = v.findViewById(R.id.home_screen);
+        recyclerView = v.findViewById(R.id.recylerView_for_content);
         linearLayoutManager = utility.scroll_view_for_recylerView_layoutmanager(v.context,LinearLayoutManager.VERTICAL);
         recyclerView.layoutManager=linearLayoutManager
 
@@ -73,37 +73,39 @@ private fun init(){
         load_Now_Playing_movies()
         load_Upcoming_movies()
 
-
-        //Log.i("hello", maps.size.toString())
     }
 
     // below method is used to laod top rated movies movie_db
 
     private fun load_TopRated_Movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, "IN")
+        val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, "")
         loadMovieCategories(call, TOP_RATED_MOVIES)
 
     }
 
     private fun load_Popular_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,"IN")
+        val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,"")
         loadMovieCategories(call, POPULAR_MOVIES)
 
     }
     private fun load_Now_Playing_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, "IN")
+        val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, "") //IN for india
         loadMovieCategories(call, NOW_PLAYING_MOVIES)
     }
     private fun load_Upcoming_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, "IN")
+        val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, "")
         loadMovieCategories(call, UPCOMING_MOVIES)
     }
+
+
     private fun load_countries(){
         val call: Call<Array<Countries>> = API.search_In_Movies().countries(Movie_db_config.API_KEY)
        call.enqueue(object :Callback<Array<Countries>>{
            override fun onResponse(call: Call<Array<Countries>>?, response: Response<Array<Countries>>?) {
 
                if (call != null) {
+
+
                    countries= response!!.body()
                }
            }
@@ -114,12 +116,12 @@ private fun init(){
        })
     }
 
-
-
     //
     //
     private fun loadMovieCategories(call: Call<MoviesResponse>?, index:Int){
+
         call!!.enqueue(object: Callback<MoviesResponse> {
+
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
                 if(response!!.isSuccessful){
 
@@ -143,12 +145,10 @@ private fun init(){
     {
         if (call != null) {
             var  movies: List<Movies>? = response!!.body().results;
-            maps.put(index,movies);
-//            recyclerView!!.adapter = Home_screen_adapter(maps);
+            maps.put(index,movies)
 
         }
     }
-
 
     // temp freezing main thread to load all data from server
     // not a good option, need to replace with Rxjava Observable and Zip methods
@@ -157,7 +157,12 @@ private fun init(){
         val handler = Handler()
         val runnable = Runnable {
 
+
             recyclerView!!.adapter = Home_screen_adapter(maps, countries)
+            //
+            //
+            // setting up a divider for recylerview
+            recyclerView.addItemDecoration(utility.GetRecylerViewDivider(linearLayoutManager,recyclerView.context))
 
             progressbar.setVisibility(View.INVISIBLE)
         }

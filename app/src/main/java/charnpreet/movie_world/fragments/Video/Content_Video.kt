@@ -8,8 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
+import charnpreet.movie_world.adapter.NoResult.NoResult
 import charnpreet.movie_world.adapter.Video.ContentVideoAdapter
 import charnpreet.movie_world.model.ContentVideo
 import charnpreet.movie_world.model.Movies
@@ -24,9 +26,15 @@ import java.io.Serializable
 
 class Content_Video : Fragment() {
     lateinit var v: View
+
     private lateinit var movie: Movies
+
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
+
     lateinit var recyclerView: RecyclerView
+
+    private lateinit var progressbar: ProgressBar
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         v = inflater.inflate(R.layout.recyler_view,container,false)
@@ -62,6 +70,8 @@ class Content_Video : Fragment() {
 
     private fun Init(){
 
+        progressbar = utility.getProgressBarReference(v)
+
         recyclerView = v.findViewById(R.id.recylerView_for_content)
 
         recyclerView.layoutManager = utility.scroll_view_for_recylerView_layoutmanager(v.context, LinearLayoutManager.VERTICAL)
@@ -80,17 +90,28 @@ class Content_Video : Fragment() {
             override fun onResponse(call: Call<ContentVideo>?, response: Response<ContentVideo>?) {
                 if(call!=null){
                     val video: List<VideoDetails>? = response!!.body().results
-                    Log.i("hello", video!![0].key)
-                    recyclerView.adapter = ContentVideoAdapter(video)
+
+                    if((video!!.size>0)){
+
+                        recyclerView.adapter = ContentVideoAdapter(video)
+
+                    }else{
+
+                        recyclerView.adapter = NoResult()
+                    }
+
                 }
+                progressbar.setVisibility(View.INVISIBLE)
             }
             //
             // to do can make it more user friendly
             // can print error on user screen or to write to log file
             override fun onFailure(call: Call<ContentVideo>?, t: Throwable?) {
+
+                progressbar.setVisibility(View.INVISIBLE)
+
                 Log.e("hello", call!!.request().toString())
                 Log.e("hello", t!!.localizedMessage)
-
 
             }
 

@@ -2,6 +2,7 @@ package charnpreet.movie_world.adapter.Video
 
 import android.app.Activity
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +18,12 @@ class ContentVideoAdapter(movie_Videos:List<VideoDetails>?): RecyclerView.Adapte
     lateinit var v : View
 
     val movie_Videos: List<VideoDetails>? = movie_Videos
-    lateinit var  mInitlizier: YouTubePlayer.OnInitializedListener
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ContentVideoViewHolder {
 
         val inflater: LayoutInflater =  LayoutInflater.from(p0.context)
 
         v =inflater.inflate(R.layout.content_video,p0, false)
-
 
         return ContentVideoViewHolder(v)
     }
@@ -38,19 +38,6 @@ class ContentVideoAdapter(movie_Videos:List<VideoDetails>?): RecyclerView.Adapte
     override fun onBindViewHolder(holder: ContentVideoViewHolder, position: Int) {
 
 
-
-        val onThumbnailLoadedListener : YouTubeThumbnailLoader.OnThumbnailLoadedListener = object: YouTubeThumbnailLoader.OnThumbnailLoadedListener{
-
-            override fun onThumbnailError(p0: YouTubeThumbnailView?, p1: YouTubeThumbnailLoader.ErrorReason?) {
-                TODO("not implemented") //implement to handle video not available errors
-            }
-
-            override fun onThumbnailLoaded(p0: YouTubeThumbnailView?, p1: String?) {
-                p0!!.setVisibility(View.VISIBLE)
-                holder.relativeLayoutOverYouTubeThumbnailView.visibility = View.VISIBLE
-
-            }
-        }
         holder.youTubeThumbnailView!!.initialize(Movie_db_config.YOUTUBEPLAYER_API_KEY, object: YouTubeThumbnailView.OnInitializedListener{
 
 
@@ -58,37 +45,48 @@ class ContentVideoAdapter(movie_Videos:List<VideoDetails>?): RecyclerView.Adapte
 
                 p1!!.setVideo(movie_Videos!![position].key)
 
-                p1.setOnThumbnailLoadedListener(onThumbnailLoadedListener)
+                p1.setOnThumbnailLoadedListener(object :YouTubeThumbnailLoader.OnThumbnailLoadedListener{
+
+                    override fun onThumbnailLoaded(p2: YouTubeThumbnailView?, p3: String?) {
+
+                        p1.release()
+
+                    }
+
+                    override fun onThumbnailError(p0: YouTubeThumbnailView?, p1: YouTubeThumbnailLoader.ErrorReason?) {
+
+                        Log.i("hello", "thumbnail unable to load")
+
+                    }
+
+                })
 
             }
 
             override fun onInitializationFailure(p0: YouTubeThumbnailView?, p1: YouTubeInitializationResult?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+                    Log.i("hello", "thumbnail initilization failed")
+
             }
 
         })
 
+            holder.playButton.setOnClickListener {
 
-        holder.playButton.setOnClickListener(View.OnClickListener {
+                val intent = YouTubeStandalonePlayer.createVideoIntent(v.context as Activity, Movie_db_config.YOUTUBEPLAYER_API_KEY,  movie_Videos!![0].key,0,true,true)
 
-            val intent = YouTubeStandalonePlayer.createVideoIntent(v.context as Activity, Movie_db_config.YOUTUBEPLAYER_API_KEY,  movie_Videos!![position].key,0,true,true)
-            v.context.startActivity(intent)
-        })
+                v.context.startActivity(intent)
+            }
+
     }
 
 
-    class ContentVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
+ inner class ContentVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
 
+        val v = itemView
 
-        val v: View = itemView
-
-        var playButton:ImageView = v.findViewById(R.id.btnYoutube_player)
-
-        val relativeLayoutOverYouTubeThumbnailView: RelativeLayout = v.findViewById(R.id.relativeLayout_over_youtube_thumbnail)
+        val playButton:ImageView = v.findViewById(R.id.btnYoutube_player)
 
         val youTubeThumbnailView: YouTubeThumbnailView? = v.findViewById(R.id.youTubeVideo_thubnil)
-
-
-
     }
 }
