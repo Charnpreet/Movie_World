@@ -28,7 +28,6 @@ class contentReviewsAdapter(movie_reviews:List<reviewDetails>?): RecyclerView.Ad
         p0.textView.setText(movie_reviews!![p1].content)
     }
 
-
     class ContentReviewViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
 
         val v:View = itemView

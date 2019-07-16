@@ -49,7 +49,7 @@ class display_movie_adapter(movies: List<Movies>?, lrowLayout: Int, applicationC
         // implementing onclick listener
         //
         p0.movieImage.setOnClickListener(View.OnClickListener {
-            Log.i("hello","you clicked an image")
+            Log.i("hello","you clicked an image from Display Movie")
 
             load_content_details_Fragment(movies!![p1])
         })

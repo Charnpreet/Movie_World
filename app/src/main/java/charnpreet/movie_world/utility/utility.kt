@@ -5,10 +5,15 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import charnpreet.movie_world.R
 import charnpreet.movie_world.fragments.content_details.Content_details
+import com.google.android.youtube.player.internal.m
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,36 +67,16 @@ class utility{
         fragmentTransaction.commit();
     }
 
+    //
+    // this returns devider for recylerview
+    fun GetRecylerViewDivider(m:RecyclerView.LayoutManager, context: Context):DividerItemDecoration{
 
-//    //
-//    // load reviews for selected movie
-//    // will be used with view pager
-//    private fun load_Reviews(id:Int,call: Call<T>): T?
-//    {
-//
-//        var  review: T? = null
-//
-//        call.enqueue(object : Callback<T> {
-//
-//            override fun onFailure(call: Call<T>?, t: Throwable?) {
-//
-//                Log.e("hello", call!!.request().toString())
-//
-//                Log.e("hello", t!!.localizedMessage)
-//            }
-//
-//            override fun onResponse(call: Call<T>?, response: Response<T>?) {
-//
-//                if(call!=null){
-//
-//                    review  = response!!.body()
-//                }
-//
-//            }
-//
-//        })
-//        //
-//        //
-//        return review
-//    }
+        return DividerItemDecoration(context, (m as LinearLayoutManager).orientation)
+    }
+
+    // not used can be used to get progress bar
+    fun getProgressBarReference(v:View):ProgressBar{
+
+        return  v.findViewById(R.id.pbHeaderProgress)
+    }
 }

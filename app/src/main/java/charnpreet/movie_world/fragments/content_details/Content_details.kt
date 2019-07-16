@@ -68,16 +68,18 @@ class Content_details(): Fragment() {
     private fun SetupViewPager(){
         val adapter:PagerAdapter =
             View_Pager(childFragmentManager, tabLayout.tabCount, movie)
-        viewPager.adapter = adapter
-        SetupListner()
+            viewPager.adapter = adapter
+            SetupListner()
     }
 
     private fun SetupListner(){
 
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+
         tabLayout.addOnTabSelectedListener(object:TabLayout.OnTabSelectedListener{
 
             override fun onTabReselected(p0: TabLayout.Tab?) {
+
                 viewPager.setCurrentItem(p0!!.position)
             }
 

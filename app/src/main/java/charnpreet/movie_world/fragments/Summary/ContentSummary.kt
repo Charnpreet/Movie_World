@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import charnpreet.movie_world.R
 import charnpreet.movie_world.adapter.Sumarry.ContentSummaryAdapter
 import charnpreet.movie_world.model.Movies
@@ -18,10 +19,14 @@ class ContentSummary : Fragment() {
     private lateinit var movie:Movies
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance;
     lateinit var recyclerView: RecyclerView
+    private lateinit var progressbar: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         v = inflater.inflate(R.layout.recyler_view,container,false)
+
         Init()
+
         return v
     }
 
@@ -50,13 +55,16 @@ class ContentSummary : Fragment() {
     }
 
     private fun Init(){
+        progressbar =  utility.getProgressBarReference(v)
+
+        progressbar.setVisibility(View.INVISIBLE)
+
         recyclerView = v.findViewById(R.id.recylerView_for_content)
 
         recyclerView.layoutManager = utility.scroll_view_for_recylerView_layoutmanager(v.context, LinearLayoutManager.VERTICAL)
 
-       ExtractBundle()
+         ExtractBundle()
 
-        recyclerView.adapter =
-            ContentSummaryAdapter(movie) //movie object extracted from bundle
+        recyclerView.adapter = ContentSummaryAdapter(movie)     //movie object extracted from bundle
     }
 }
