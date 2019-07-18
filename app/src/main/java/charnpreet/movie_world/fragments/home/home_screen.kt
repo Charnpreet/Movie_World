@@ -23,10 +23,6 @@ import retrofit2.Response
 
 class home_screen: Fragment() {
 
-    val TOP_RATED_MOVIES   = 0
-    val POPULAR_MOVIES     = 1
-    val UPCOMING_MOVIES    = 2
-    val NOW_PLAYING_MOVIES = 3
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
     lateinit var  v : View
     lateinit var recyclerView: RecyclerView
@@ -79,22 +75,22 @@ private fun init(){
 
     private fun load_TopRated_Movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, "")
-        loadMovieCategories(call, TOP_RATED_MOVIES)
+        loadMovieCategories(call, utility.TOP_RATED_MOVIES)
 
     }
 
     private fun load_Popular_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,"")
-        loadMovieCategories(call, POPULAR_MOVIES)
+        loadMovieCategories(call, utility.POPULAR_MOVIES)
 
     }
     private fun load_Now_Playing_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, "") //IN for india
-        loadMovieCategories(call, NOW_PLAYING_MOVIES)
+        loadMovieCategories(call, utility.NOW_PLAYING_MOVIES)
     }
     private fun load_Upcoming_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, "")
-        loadMovieCategories(call, UPCOMING_MOVIES)
+        loadMovieCategories(call, utility.UPCOMING_MOVIES)
     }
 
 

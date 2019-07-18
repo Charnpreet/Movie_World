@@ -22,19 +22,19 @@ import retrofit2.Response
 class search_in_movies : Fragment(){
     lateinit var  v : View
     lateinit var recyclerView_for_search_movies: RecyclerView
-    private lateinit var linearLayoutManager: LinearLayoutManager;
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var search_view :android.widget.SearchView
     private lateinit var progressbar: ProgressBar
     companion object{
         fun newInstance(): search_in_movies {
-            return search_in_movies();
+            return search_in_movies()
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        v  = inflater.inflate(R.layout.display_movie_fragment,container,false);
-        init();
-        return v;
+        v  = inflater.inflate(R.layout.display_movie_fragment,container,false)
+        init()
+        return v
 //
 
     }
@@ -45,8 +45,8 @@ class search_in_movies : Fragment(){
         // progress bar instancian can be moved to utility class
         progressbar = v.findViewById(R.id.pbHeaderProgress)
         progressbar.setVisibility(View.INVISIBLE)
-        init_recylerview();
-        setingup_listeners();
+        init_recylerview()
+        setingup_listeners()
 
 
 
@@ -55,16 +55,8 @@ class search_in_movies : Fragment(){
     private fun init_recylerview(){
 
         recyclerView_for_search_movies = v.findViewById(R.id.display_movies_recylerview)
-
-        if(recyclerView_for_search_movies!=null){
-
-            linearLayoutManager = GridLayoutManager(v.context,2)
-
-            recyclerView_for_search_movies !!.layoutManager = linearLayoutManager
-        }
-        else {
-            Log.i("hello", "error ataching recyler View ");
-        }
+        linearLayoutManager = GridLayoutManager(v.context,2)
+        recyclerView_for_search_movies.layoutManager = linearLayoutManager
     }
 
     private fun setingup_listeners(){
@@ -73,11 +65,11 @@ class search_in_movies : Fragment(){
                progressbar.setVisibility(View.VISIBLE)
                fetech_searchView_data(query)
 
-               return false;
+               return false
            }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-                return false;
+                return false
             }
         })
 
@@ -95,8 +87,8 @@ class search_in_movies : Fragment(){
                 if(call!=null){
                         var  movies: List<Movies>? = response!!.body().results
 
-                    if (movies!!.size>0){
-                        recyclerView_for_search_movies!!.adapter =
+                    if (movies!!.isNotEmpty()){
+                        recyclerView_for_search_movies.adapter =
                             display_movie_adapter(
                                 movies,
                                 R.layout.display_movie_recylerview_holder,
@@ -109,7 +101,7 @@ class search_in_movies : Fragment(){
                         recyclerView_for_search_movies.adapter = NoResult()
                     }
                 }
-                progressbar.setVisibility(View.INVISIBLE)
+                progressbar.visibility = View.INVISIBLE
             }
             //
             // to do can make it more user friendly
@@ -117,7 +109,7 @@ class search_in_movies : Fragment(){
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
                 Log.i("hello", call!!.request().toString())
                 Log.i("hello", t!!.localizedMessage)
-                progressbar.setVisibility(View.INVISIBLE)
+                progressbar.visibility = View.INVISIBLE
 
             }
 
