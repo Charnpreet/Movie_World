@@ -20,11 +20,14 @@ import charnpreet.movie_world.model.Countries
 //
 class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>, countries: Array<Countries>): RecyclerView.Adapter<Home_screen_adapter.Home_screen_view_holder>() {
 
-    val TOP_RATED_MOVIES = "Top Rated Movies"
-    val POPULAR_MOVIES  =  "Popular Movies"
+    val TOP_RATED_MOVIES       = "Top Rated Movies"
+    val POPULAR_MOVIES         =  "Popular Movies"
     val UPCOMING_MOVIES        =  "Upcomming Movies"
     val NOW_PLAYING_MOVIES     =  "Now Playing Movies"
-    val NO_OF_CATOGORIES_TO_DISPLAY_ON_HOME_SCREEN = 4;
+
+    val NO_OF_CATOGORIES_TO_DISPLAY_ON_HOME_SCREEN = 4
+
+
 
     private var movies: MutableMap<Int,List<Movies>?> = movies
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance;
@@ -52,25 +55,26 @@ class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>, countries: Arr
             // setRecycledViewPool(viewPool)
         }
         if(p1==0){
+
             p0.textView.setText(TOP_RATED_MOVIES)
             p0.recyclerView.adapter =
-                Home_Screen_Movies_adapter(movies[0], view.context)
+                Home_Screen_Movies_adapter(movies[utility.TOP_RATED_MOVIES], view.context)
 
         }
         if(p1==1){
             p0.textView.setText(POPULAR_MOVIES)
            p0.recyclerView.adapter =
-               Home_Screen_Movies_adapter(movies[1], view.context)
+               Home_Screen_Movies_adapter(movies[utility.POPULAR_MOVIES], view.context)
         }
         if(p1==2){
             p0.textView.setText(UPCOMING_MOVIES)
           p0.recyclerView.adapter =
-              Home_Screen_Movies_adapter(movies[2], view.context)
+              Home_Screen_Movies_adapter(movies[utility.UPCOMING_MOVIES], view.context)
         }
         if(p1==3){
             p0.textView.setText(NOW_PLAYING_MOVIES)
             p0.recyclerView.adapter =
-                Home_Screen_Movies_adapter(movies[3], view.context)
+                Home_Screen_Movies_adapter(movies[utility.NOW_PLAYING_MOVIES], view.context)
         }
         p0.spinner.adapter= ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_dropdown_item, p0.countryOption)
         p0.spinner.visibility = View.INVISIBLE
