@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import charnpreet.movie_world.R
 
-class NoResult():RecyclerView.Adapter<NoResult.NoResultHolder>()  {
+class NoResult(displayText:String):RecyclerView.Adapter<NoResult.NoResultHolder>()  {
+
+    val displayText:String = displayText
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): NoResultHolder {
         val view = LayoutInflater.from(p0.context).inflate(R.layout.no_result, p0, false)
@@ -15,7 +17,7 @@ class NoResult():RecyclerView.Adapter<NoResult.NoResultHolder>()  {
     }
 
     override fun onBindViewHolder(p0: NoResultHolder, p1: Int) {
-        p0.textView.setText("No Result")
+        p0.textView.setText(displayText)
     }
 
     override fun getItemCount(): Int {

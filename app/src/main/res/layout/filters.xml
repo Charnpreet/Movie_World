@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
+
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/countriesSpinner" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="100dp"
+            android:layout_marginRight="2dp" android:layout_marginEnd="2dp" android:layout_marginBottom="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/languagesSpinner" app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/languagesSpinner" android:layout_marginTop="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/countriesSpinner" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/saveButton"/>
+    <Button
+            android:text="Save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/saveButton" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="48dp" android:layout_marginTop="300dp"
+            app:layout_constraintTop_toBottomOf="@+id/languagesSpinner"/>
+</android.support.constraint.ConstraintLayout>

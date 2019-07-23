@@ -95,10 +95,6 @@ class ContentReview : Fragment() {
             override fun onFailure(call: Call<Content_Review>?, t: Throwable?) {
 
                 progressbar.setVisibility(View.INVISIBLE)
-
-                Log.e("hello", call!!.request().toString())
-
-                Log.e("hello", t!!.localizedMessage)
             }
 
             override fun onResponse(call: Call<Content_Review>?, response: Response<Content_Review>?) {
@@ -115,7 +111,7 @@ class ContentReview : Fragment() {
                     }
 
                     else{
-                        recyclerView.adapter = NoResult()
+                        recyclerView.adapter = NoResult("No Reviews Found")
                     }
 
 
