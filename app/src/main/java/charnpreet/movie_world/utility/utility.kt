@@ -1,5 +1,6 @@
 package charnpreet.movie_world.utility
 
+import android.app.AlertDialog
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -25,6 +26,21 @@ class utility{
     companion object{
         val utility_instance =utility()
     }
+
+    var languages: String = ""
+        //  getter
+        get() = field
+        // setter
+        set(value) {
+            field = value
+        }
+    var country: String = ""
+        //  getter
+        get() = field
+        // setter
+        set(value) {
+            field = value
+        }
 
 
     //
@@ -61,5 +77,16 @@ class utility{
     fun getProgressBarReference(v:View):ProgressBar{
 
         return  v.findViewById(R.id.pbHeaderProgress)
+    }
+    //
+    // this  will return dilaog builder with passed in info
+    // title will be used as title and message as a message for alertdialog
+    // boolean here is if user can cancel alert dialog or not
+    fun getCustomAlertDialogBuilder(title:String, messgae:String, cancelable:Boolean, context: Context):AlertDialog.Builder{
+        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+        alertDialogBuilder.setTitle(title)
+        alertDialogBuilder.setMessage(messgae).setCancelable(cancelable)
+        return alertDialogBuilder
+
     }
 }

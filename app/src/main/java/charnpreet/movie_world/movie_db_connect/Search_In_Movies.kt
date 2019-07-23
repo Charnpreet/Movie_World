@@ -17,7 +17,7 @@ interface Search_In_Movies {
 
 //    //TOP RATED MOVIES
     @GET("movie/top_rated")
-    fun topRated(@Query("api_key") apiKey: String, @Query("region") region: String): Call<MoviesResponse>
+    fun topRated(@Query("api_key") apiKey: String, @Query("region") region: String, @Query("language") language: String): Call<MoviesResponse>
 //
 //    //MOVIE DETAIL
     @GET("/3/movie/{id}")
@@ -29,15 +29,15 @@ interface Search_In_Movies {
 
     //    //Popular MOVIES
     @GET("movie/popular")
-    fun popularMovies(@Query("api_key") apiKey: String, @Query("region") region: String): Call<MoviesResponse>
+    fun popularMovies(@Query("api_key") apiKey: String, @Query("region") region: String, @Query("language") language: String): Call<MoviesResponse>
 
     //    //Now Playing MOVIES
     @GET("movie/now_playing")
-    fun nowPlaying(@Query("api_key")apiKey: String, @Query("region") region: String ): Call<MoviesResponse>
+    fun nowPlaying(@Query("api_key")apiKey: String, @Query("region") region: String, @Query("language") language: String ): Call<MoviesResponse>
 
     //    //Upcoming MOVIES
     @GET("movie/upcoming")
-    fun upComing(@Query("api_key") apiKey: String, @Query("region") region: String): Call<MoviesResponse>
+    fun upComing(@Query("api_key") apiKey: String, @Query("region") region: String, @Query("language") language: String): Call<MoviesResponse>
     //    //Upcoming MOVIES
     @GET("configuration/countries")
     fun countries(@Query("api_key") apiKey: String): Call<Array<Countries>>
@@ -49,5 +49,9 @@ interface Search_In_Movies {
     // movie Trailer and Teaser
     @GET("movie/{id}/videos")
     fun contentVideo(@Path("id") movieID :Int?, @Query("api_key")apiKey: String):Call<ContentVideo>
+
+    // languages
+    @GET("configuration/languages")
+    fun languages(@Query("api_key") apiKey: String): Call<Array<MovieLanguages>>
 
 }

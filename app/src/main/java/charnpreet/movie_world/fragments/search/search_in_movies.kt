@@ -98,7 +98,7 @@ class search_in_movies : Fragment(){
                     else{
                         // ataching no reuslt Adapter
                         //
-                        recyclerView_for_search_movies.adapter = NoResult()
+                        recyclerView_for_search_movies.adapter = NoResult("No Movie Found")
                     }
                 }
                 progressbar.visibility = View.INVISIBLE

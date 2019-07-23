@@ -8,19 +8,20 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
 import charnpreet.movie_world.adapter.HomeScreen.Home_screen_adapter
 import charnpreet.movie_world.adapter.NoResult.NoResult
-import charnpreet.movie_world.model.Countries
+import charnpreet.movie_world.utility.utility
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import charnpreet.movie_world.movie_db_connect.API
-import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +34,7 @@ class home_screen: Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private  var maps:  MutableMap<Int,List<Movies>?> = mutableMapOf<Int,List<Movies>?>()
     private lateinit var progressbar: ProgressBar
-    private var countries:Array<Countries> =arrayOf()
+    private lateinit var progressBarTextView: TextView
     private var loaded :Boolean = true
 
 
@@ -44,17 +45,20 @@ class home_screen: Fragment() {
         }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        v= inflater.inflate(R.layout.home_screen, container,false);
+        v= inflater.inflate(R.layout.home_screen, container,false)
 
         init()
+        RetrivingDataFromSharedPreferences()
         return v
     }
 
 
 private fun init(){
     progressbar = v.findViewById(R.id.pbHeaderProgress)
+    progressBarTextView = v.findViewById(R.id.progressBarTextView)
     init_recylerView()
     if(internetConnectionAvailable()){
+
         Load_Movie_Categories()
     }else{
         // IF NO NETWORK IS AVAILABLE
@@ -78,26 +82,27 @@ private fun init(){
 
     private fun load_TopRated_Movies(){
 
-        val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, "")
+        val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, utility.country,utility.languages)
+        progressBarTextView.setText("Now loading Top Rated Movies")
         // passing next method to be called
         loadMovieCategories(call, utility.TOP_RATED_MOVIES, ::load_Popular_movies)
 
     }
 
     private fun load_Popular_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,"")
-
+        val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,utility.country, utility.languages)
+        progressBarTextView.setText("Now loading Top Popular Movies")
         loadMovieCategories(call, utility.POPULAR_MOVIES, ::load_Now_Playing_movies)
 
     }
     private fun load_Now_Playing_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, "") //IN for india
-
+        val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, utility.country, utility.languages) //IN for india
+        progressBarTextView.setText("loading Now Playing Movies")
         loadMovieCategories(call, utility.NOW_PLAYING_MOVIES, ::load_Upcoming_movies)
     }
     private fun load_Upcoming_movies(){
-        val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, "")
-
+        val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, utility.country, utility.languages)
+        progressBarTextView.setText("Now loading Upcoming Movies")
         loadMovieCategories(call, utility.UPCOMING_MOVIES, ::loadAdapters)
     }
 
@@ -119,7 +124,7 @@ private fun init(){
             }
 
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
-                recyclerView.adapter = NoResult()
+                recyclerView.adapter = NoResult("Unable To Load Movies")
 
                 progressbar.setVisibility(View.INVISIBLE)
             }
@@ -145,7 +150,7 @@ private fun init(){
         //
         // need supscriber which must observe loaded value if its get changes must trigger load apdapter methods
         if(loaded){
-            recyclerView.adapter = Home_screen_adapter(maps, countries)
+            recyclerView.adapter = Home_screen_adapter(maps)
             //
             //
             // setting up a divider for recylerview
@@ -155,6 +160,7 @@ private fun init(){
         }
 
         progressbar.setVisibility(View.INVISIBLE)
+        progressBarTextView.visibility = View.INVISIBLE
     }
     //
     // checking if connection is available or not
@@ -167,32 +173,23 @@ private fun init(){
     }
 
     fun loadNoResultAdapter() {
-        recyclerView.adapter =  NoResult()
-        progressbar.setVisibility(View.INVISIBLE)
+        recyclerView.adapter =  NoResult("Unable To Load Movies")
+    }
+
+    fun RetrivingDataFromSharedPreferences(){
+        val sharedPreference =  v.context.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+        val country = sharedPreference.getString("country","")
+        val language = sharedPreference.getString("language","")
+        if(country!=null){
+            utility.country = country
+        }
+       if(language!=null){
+           utility.languages = language
+       }
 
     }
 
 }
-
-
-
-//    private fun load_countries(){
-//        val call: Call<Array<Countries>> = API.search_In_Movies().countries(Movie_db_config.API_KEY)
-//        call.enqueue(object :Callback<Array<Countries>>{
-//            override fun onResponse(call: Call<Array<Countries>>?, response: Response<Array<Countries>>?) {
-//
-//                if (call != null) {
-//
-//
-//                    countries= response!!.body()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Array<Countries>>?, t: Throwable?) {
-//
-//            }
-//        })
-//    }
 
 
 // temp freezing main thread to load all data from server

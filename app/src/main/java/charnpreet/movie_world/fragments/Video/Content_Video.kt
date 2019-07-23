@@ -97,7 +97,7 @@ class Content_Video : Fragment() {
 
                     }else{
 
-                        recyclerView.adapter = NoResult()
+                        recyclerView.adapter = NoResult("No Trailer Found")
                     }
 
                 }
