@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -36,9 +35,7 @@ class home_screen: Fragment() {
     private lateinit var progressbar: ProgressBar
     private lateinit var progressBarTextView: TextView
     private var loaded :Boolean = true
-
-
-
+    private val UNABLE_TO_LOAD_MOVIES ="Unable To Load Movies"
     companion object{
         fun newInstance(): home_screen {
             return home_screen()
@@ -46,7 +43,6 @@ class home_screen: Fragment() {
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.home_screen, container,false)
-
         init()
         RetrivingDataFromSharedPreferences()
         return v
@@ -83,7 +79,7 @@ private fun init(){
     private fun load_TopRated_Movies(){
 
         val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, utility.country,utility.languages)
-        progressBarTextView.setText("Now loading Top Rated Movies")
+        progressBarTextView.setText(utility.NOW_LOADING_TOP_RATED_MOVIES)
         // passing next method to be called
         loadMovieCategories(call, utility.TOP_RATED_MOVIES, ::load_Popular_movies)
 
@@ -91,18 +87,18 @@ private fun init(){
 
     private fun load_Popular_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,utility.country, utility.languages)
-        progressBarTextView.setText("Now loading Top Popular Movies")
+        progressBarTextView.setText(utility.NOW_LOADING_TOP_POPULAR_MOVIES)
         loadMovieCategories(call, utility.POPULAR_MOVIES, ::load_Now_Playing_movies)
 
     }
     private fun load_Now_Playing_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, utility.country, utility.languages) //IN for india
-        progressBarTextView.setText("loading Now Playing Movies")
+        progressBarTextView.setText(utility.LOADING_NOW_PLAYING_MOVIES)
         loadMovieCategories(call, utility.NOW_PLAYING_MOVIES, ::load_Upcoming_movies)
     }
     private fun load_Upcoming_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, utility.country, utility.languages)
-        progressBarTextView.setText("Now loading Upcoming Movies")
+        progressBarTextView.setText(utility.NOW_LOADING_UPCOMING_MOVIES)
         loadMovieCategories(call, utility.UPCOMING_MOVIES, ::loadAdapters)
     }
 
@@ -124,9 +120,12 @@ private fun init(){
             }
 
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
-                recyclerView.adapter = NoResult("Unable To Load Movies")
+
+                recyclerView.adapter = NoResult(UNABLE_TO_LOAD_MOVIES)
+                Log.i("hello", t!!.message)
 
                 progressbar.setVisibility(View.INVISIBLE)
+                progressBarTextView.visibility = View.INVISIBLE
             }
 
         })
@@ -138,8 +137,9 @@ private fun init(){
     private fun passingdatatorecyerview(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?,index:Int)
     {
         if (call != null) {
-            var  movies: List<Movies>? = response!!.body().results;
+            val movies: List<Movies>? = response!!.body().results;
             maps.put(index,movies)
+
 
 
         }
@@ -155,6 +155,7 @@ private fun init(){
             //
             // setting up a divider for recylerview
             recyclerView.addItemDecoration(utility.GetRecylerViewDivider(linearLayoutManager,recyclerView.context))
+
         }else{
              loadNoResultAdapter()
         }
@@ -173,13 +174,15 @@ private fun init(){
     }
 
     fun loadNoResultAdapter() {
-        recyclerView.adapter =  NoResult("Unable To Load Movies")
+
+        recyclerView.adapter =  NoResult(UNABLE_TO_LOAD_MOVIES)
     }
 
     fun RetrivingDataFromSharedPreferences(){
-        val sharedPreference =  v.context.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
-        val country = sharedPreference.getString("country","")
-        val language = sharedPreference.getString("language","")
+
+        val sharedPreference =  v.context.getSharedPreferences(utility.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val country = sharedPreference.getString(utility.COUNTRY_TEXT,"")
+        val language = sharedPreference.getString(utility.LANGUAGE_TEXT,"")
         if(country!=null){
             utility.country = country
         }
@@ -189,24 +192,7 @@ private fun init(){
 
     }
 
+
 }
 
 
-// temp freezing main thread to load all data from server
-// not a good option, need to replace with Rxjava Observable and Zip methods
-//fun HoldingMainThreadUnitlDataIsLoaded() {
-//
-//    val handler = Handler()
-//    val runnable = Runnable {
-//
-//
-//        recyclerView.adapter = Home_screen_adapter(maps, countries)
-//        //
-//        //
-//        // setting up a divider for recylerview
-//        recyclerView.addItemDecoration(utility.GetRecylerViewDivider(linearLayoutManager,recyclerView.context))
-//
-//        progressbar.setVisibility(View.INVISIBLE)
-//    }
-//    handler.postDelayed(runnable, 10000)
-//}

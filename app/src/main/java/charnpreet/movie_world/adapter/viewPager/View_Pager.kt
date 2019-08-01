@@ -11,25 +11,22 @@ import charnpreet.movie_world.fragments.Video.Content_Video
 import charnpreet.movie_world.model.Content_Review
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class View_Pager(fm: FragmentManager?, items:Int, movie: Movies) : FragmentPagerAdapter(fm) {
+class View_Pager(fm: FragmentManager?, items:Int, private val movie: Movies) : FragmentPagerAdapter(fm) {
 
-    private val movie : Movies = movie
-    private var viewPagerFragments: MutableList<Fragment> = mutableListOf()
     private val tabItems: Int = items
-    private val tabTitles = arrayOf("SUMMARY", "REVIEWS", "VIDEO")
+    val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
+    private val tabTitles = arrayOf(utility.VIEW_PAGER_TAB_SUMMARY, utility.VIEW_PAGER_TAB_REVIEWS, utility.VIEW_PAGER_TAB_VIDEO)
 
 
 // need to implement back ground thead or async task
 
     override fun getItem(p0: Int): Fragment {
 
-//        if(viewPagerFragments.size>0){
-//            return viewPagerFragments.get(p0)
-//        }
         if(p0==0){
 
             return ContentSummary.newInstance(movie)
@@ -60,16 +57,5 @@ class View_Pager(fm: FragmentManager?, items:Int, movie: Movies) : FragmentPager
 
         return tabItems
     }
-
-    //
-    // adds fragment to the list
-   public fun AddFragment(fragment:Fragment){
-
-        viewPagerFragments.add(fragment)
-
-    }
-
-
-
 
 }

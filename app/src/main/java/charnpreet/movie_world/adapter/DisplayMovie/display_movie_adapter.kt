@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,8 +15,7 @@ import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
 import charnpreet.movie_world.model.Movies
 import com.squareup.picasso.Picasso
-import android.support.v7.app.AppCompatActivity
-import charnpreet.movie_world.Activity.Activity.ContentDetail.ContentDetail
+import charnpreet.movie_world.Activity.Content_Detail.ContentDetail
 import charnpreet.movie_world.utility.utility
 import java.io.Serializable
 
@@ -27,7 +25,7 @@ class display_movie_adapter(private var movies: List<Movies>?, lrowLayout: Int, 
     private var rowLayout: Int = lrowLayout
     private var context: Context? = applicationContext
     private lateinit var view : View
-
+    private val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MovieDetailHolder {
         view  = LayoutInflater.from(p0.context).inflate(rowLayout, p0,false)
        return MovieDetailHolder(view)
@@ -69,8 +67,8 @@ class display_movie_adapter(private var movies: List<Movies>?, lrowLayout: Int, 
     private fun loadContentDetailActivity(movie : Movies){
         val intent = Intent(view.context, ContentDetail::class.java)
         val bundle = Bundle()
-        bundle.putSerializable("movie", movie as Serializable)
-        intent.putExtra("movie", bundle)
+        bundle.putSerializable(utility.MOVIE_TAG, movie as Serializable)
+        intent.putExtra(utility.MOVIE_TAG, bundle)
         view.context.startActivity(intent)
     }
 

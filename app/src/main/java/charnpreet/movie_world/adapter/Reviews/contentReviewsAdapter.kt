@@ -8,10 +8,8 @@ import android.widget.TextView
 import charnpreet.movie_world.R
 import charnpreet.movie_world.model.reviewDetails
 
-class contentReviewsAdapter(movie_reviews:List<reviewDetails>?): RecyclerView.Adapter<contentReviewsAdapter.ContentReviewViewHolder>() {
+class contentReviewsAdapter(private val movie_reviews: List<reviewDetails>?): RecyclerView.Adapter<contentReviewsAdapter.ContentReviewViewHolder>() {
     lateinit var v : View
-
-    private val movie_reviews:List<reviewDetails>? = movie_reviews
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ContentReviewViewHolder {
         val inflater: LayoutInflater =  LayoutInflater.from(p0.context)

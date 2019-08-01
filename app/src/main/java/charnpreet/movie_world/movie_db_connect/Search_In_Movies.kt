@@ -2,13 +2,10 @@ package charnpreet.movie_world.movie_db_connect
 
 import charnpreet.movie_world.model.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import java.util.*
+import retrofit2.http.*
 
 
-interface Search_In_Movies {
+interface  Search_In_Movies {
 
 
     //MOVIE SEARCH AUTOCOMPLETE
@@ -54,4 +51,29 @@ interface Search_In_Movies {
     @GET("configuration/languages")
     fun languages(@Query("api_key") apiKey: String): Call<Array<MovieLanguages>>
 
+    // to get temp token
+    //
+    @GET("authentication/token/new")
+    fun requestToken(@Query("api_key") apiKey: String):Call<RequestToken>
+
+    // to get session id
+    @POST("authentication/session/new")
+    @Headers("Content-Type: application/json")
+    fun CreateSession(@Query("api_key") apiKey: String, @Query("request_token") request_token: String ):Call<SessionSuccess>
+
+    // to get account details
+    @GET("account")
+    fun AccountDetails(@Query("api_key") apiKey: String, @Query("session_id") sessionID: String):Call<Profile>
+
+    @DELETE("authentication/session")
+    fun LogOut(@Query("api_key") apiKey: String, @Query("session_id") sessionID: String):Call<DeleteSession>
+
+    //  add to Faveriotes
+    @Headers("Content-Type: application/json")
+    @POST("account/{account_id}/favorite")
+    fun addToFav(@Body requestbody:FavBody, @Path("account_id") ccountId :String?, @Query("api_key") apiKey: String, @Query("session_id") sessionID: String):Call<FavAddedSuccessFully>
+
+    // to load fav movies
+    @GET("account/{account_id}/favorite/movies")
+    fun getFavMovies(@Path("account_id") accountId :String?, @Query("api_key") apiKey: String, @Query("session_id") sessionID: String):Call<MoviesResponse>
 }
