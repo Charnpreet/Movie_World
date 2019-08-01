@@ -8,10 +8,8 @@ import android.widget.TextView
 import charnpreet.movie_world.R
 import charnpreet.movie_world.model.Movies
 //
-class ContentSummaryAdapter(movies:Movies) : RecyclerView.Adapter<ContentSummaryAdapter.ContentSummaryViewHolder>() {
+class ContentSummaryAdapter(private val movies: Movies) : RecyclerView.Adapter<ContentSummaryAdapter.ContentSummaryViewHolder>() {
   lateinit var v :View
-
-    private val movies:Movies = movies
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ContentSummaryViewHolder {
 

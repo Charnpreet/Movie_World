@@ -1,5 +1,7 @@
 package charnpreet.movie_world.fragments.search
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -14,6 +16,7 @@ import charnpreet.movie_world.adapter.DisplayMovie.display_movie_adapter
 import charnpreet.movie_world.adapter.NoResult.NoResult
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
+import charnpreet.movie_world.model.RequestToken
 import charnpreet.movie_world.movie_db_connect.API
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +37,7 @@ class search_in_movies : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v  = inflater.inflate(R.layout.display_movie_fragment,container,false)
         init()
+
         return v
 //
 
@@ -85,7 +89,7 @@ class search_in_movies : Fragment(){
             Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
                 if(call!=null){
-                        var  movies: List<Movies>? = response!!.body().results
+                        val  movies: List<Movies>? = response!!.body().results
 
                     if (movies!!.isNotEmpty()){
                         recyclerView_for_search_movies.adapter =
@@ -117,6 +121,8 @@ class search_in_movies : Fragment(){
         })
 
     }
+
+
 
 }
 

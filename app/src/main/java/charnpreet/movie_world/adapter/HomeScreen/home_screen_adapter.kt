@@ -9,16 +9,13 @@ import android.widget.TextView
 import charnpreet.movie_world.R
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.utility.utility
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import charnpreet.movie_world.adapter.topRated.Home_Screen_Movies_adapter
-import charnpreet.movie_world.model.Countries
 
 //
 // this class will act as holder to holder list adaptera
 // besically it will present verticall list and each item of list can scroll horizontally
 //
-class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>): RecyclerView.Adapter<Home_screen_adapter.Home_screen_view_holder>() {
+class Home_screen_adapter(private val movies: MutableMap<Int, List<Movies>?>): RecyclerView.Adapter<Home_screen_adapter.Home_screen_view_holder>() {
 
     val TOP_RATED_MOVIES       = "Top Rated Movies"
     val POPULAR_MOVIES         =  "Popular Movies"
@@ -28,16 +25,14 @@ class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>): RecyclerView.
     val NO_OF_CATOGORIES_TO_DISPLAY_ON_HOME_SCREEN = 4
 
 
-
-    private var movies: MutableMap<Int,List<Movies>?> = movies
-    val utility: utility = charnpreet.movie_world.utility.utility.utility_instance;
+    val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
     lateinit var view:View
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): Home_screen_view_holder {
 
-        view  = LayoutInflater.from(p0.context).inflate(R.layout.home_screen_fragment, p0,false);
+        view  = LayoutInflater.from(p0.context).inflate(R.layout.home_screen_fragment, p0,false)
 
-        return Home_screen_view_holder(view);
+        return Home_screen_view_holder(view)
     }
 
     override fun getItemCount(): Int {
@@ -49,9 +44,9 @@ class Home_screen_adapter(movies:  MutableMap<Int,List<Movies>?>): RecyclerView.
 
         p0.recyclerView.apply {
 
-            layoutManager = utility.scroll_view_for_recylerView_layoutmanager(view.context,LinearLayoutManager.HORIZONTAL);
+            layoutManager = utility.scroll_view_for_recylerView_layoutmanager(view.context,LinearLayoutManager.HORIZONTAL)
 
-            // setRecycledViewPool(viewPool)
+
         }
         if(p1==0){
 

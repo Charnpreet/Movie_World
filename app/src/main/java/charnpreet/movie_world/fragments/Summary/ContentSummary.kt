@@ -49,7 +49,7 @@ class ContentSummary : Fragment() {
 
         val args =arguments
 
-        val Bmovie: Movies = args!!.get("movie") as Movies
+        val Bmovie: Movies = args!!.get(utility.MOVIE_TAG) as Movies
 
         movie = Bmovie
     }

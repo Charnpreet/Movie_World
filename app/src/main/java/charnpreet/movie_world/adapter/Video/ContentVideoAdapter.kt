@@ -14,10 +14,8 @@ import charnpreet.movie_world.model.VideoDetails
 import com.google.android.youtube.player.*
 
 
-class ContentVideoAdapter(movie_Videos:List<VideoDetails>?): RecyclerView.Adapter<ContentVideoAdapter.ContentVideoViewHolder>() {
+class ContentVideoAdapter(val movie_Videos: List<VideoDetails>?): RecyclerView.Adapter<ContentVideoAdapter.ContentVideoViewHolder>() {
     lateinit var v : View
-
-    val movie_Videos: List<VideoDetails>? = movie_Videos
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ContentVideoViewHolder {
 
@@ -43,7 +41,7 @@ class ContentVideoAdapter(movie_Videos:List<VideoDetails>?): RecyclerView.Adapte
 
             override fun onInitializationSuccess(p0: YouTubeThumbnailView?, p1: YouTubeThumbnailLoader?) {
 
-                p1!!.setVideo(movie_Videos!![position].key)
+                p1!!.setVideo(movie_Videos!![holder.adapterPosition].key)
 
                 p1.setOnThumbnailLoadedListener(object :YouTubeThumbnailLoader.OnThumbnailLoadedListener{
 

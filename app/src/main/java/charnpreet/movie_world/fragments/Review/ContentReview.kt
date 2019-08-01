@@ -32,7 +32,7 @@ class ContentReview : Fragment() {
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
     private lateinit var progressbar: ProgressBar
     lateinit var recyclerView: RecyclerView
-
+    val NO_REVIEW_FOUND ="No Reviews Found"
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         v = inflater.inflate(R.layout.recyler_view,container,false)
@@ -61,7 +61,7 @@ class ContentReview : Fragment() {
 
         val args =arguments
 
-        val Bmovie: Movies = args!!.get("movie") as Movies
+        val Bmovie: Movies = args!!.get(utility.MOVIE_TAG) as Movies
 
         movie = Bmovie
     }
@@ -111,7 +111,7 @@ class ContentReview : Fragment() {
                     }
 
                     else{
-                        recyclerView.adapter = NoResult("No Reviews Found")
+                        recyclerView.adapter = NoResult(NO_REVIEW_FOUND)
                     }
 
 

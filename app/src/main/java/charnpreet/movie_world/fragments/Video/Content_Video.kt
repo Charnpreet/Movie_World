@@ -35,10 +35,14 @@ class Content_Video : Fragment() {
 
     private lateinit var progressbar: ProgressBar
 
+    val NO_TRAILER_FOUND_TEXT ="No Trailer Found"
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         v = inflater.inflate(R.layout.recyler_view,container,false)
+
         Init()
+
         return v
     }
 
@@ -63,7 +67,7 @@ class Content_Video : Fragment() {
 
         val args =arguments
 
-        val Bmovie: Movies = args!!.get("movie") as Movies
+        val Bmovie: Movies = args!!.get(utility.MOVIE_TAG) as Movies
 
         movie = Bmovie
     }
@@ -97,7 +101,7 @@ class Content_Video : Fragment() {
 
                     }else{
 
-                        recyclerView.adapter = NoResult("No Trailer Found")
+                        recyclerView.adapter = NoResult(NO_TRAILER_FOUND_TEXT)
                     }
 
                 }
@@ -111,6 +115,7 @@ class Content_Video : Fragment() {
                 progressbar.setVisibility(View.INVISIBLE)
 
                 Log.e("hello", call!!.request().toString())
+
                 Log.e("hello", t!!.localizedMessage)
 
             }

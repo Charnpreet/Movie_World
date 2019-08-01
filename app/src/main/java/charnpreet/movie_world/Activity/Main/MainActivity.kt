@@ -1,7 +1,10 @@
-package charnpreet.movie_world.Activity.Activity.Main
+package charnpreet.movie_world.Activity.Main
 
+import android.content.DialogInterface
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
@@ -10,18 +13,33 @@ import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.view.WindowManager
+import android.widget.ProgressBar
+import android.widget.TextView
+import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
 import charnpreet.movie_world.fragments.Filter.Filter
+import charnpreet.movie_world.fragments.PersonalCollection.FavCollection
 import charnpreet.movie_world.fragments.home.home_screen
 import charnpreet.movie_world.fragments.search.search_in_movies
+import charnpreet.movie_world.model.DeleteSession
+import charnpreet.movie_world.movie_db_connect.API
 import charnpreet.movie_world.utility.utility
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener {
+
+
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+    private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +59,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         navView.setNavigationItemSelectedListener(this)
 
+       // HidingLogoutButton()
+        // lisner for bottam navigation view
+       val mOnNavigationItemSelectedListener = bottomNavigationListner()
+       // setting up listner
+        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-        //
-        // this will make sure when apps is open
-        // top rated movies loaded automatically on home screen
-        //
-        load_home_screen_Fragment();
+        val redirectUri :Uri? = getIntent().getData()
+
+        if(redirectUri!=null){
+
+            loadingProfileFragment()
+            // seting profile section of bottom navigation checked true
+            bottomNavigation.menu.getItem(2).setChecked(true)
+        }else{
+            //
+            // this will make sure when apps is open
+            // top rated movies loaded automatically on home screen
+            //
+            load_home_screen_Fragment()
+        }
+
     }
 
     override fun onBackPressed() {
@@ -83,22 +117,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_home -> {
+            R.id.home -> {
                 load_home_screen_Fragment()
+                    item.setChecked(true)
 
             }
-            R.id.nav_gallery -> {
+            R.id.search -> {
                 loading_user_search_screen()
+                item.setChecked(true)
             }
-            R.id.nav_slideshow -> {
+            R.id.profile -> {
+                loadingProfileFragment()
+
+                item.setChecked(true)
+            }
+            R.id.fav -> {
+               loadFavFragment()
+                item.setChecked(true)
 
             }
-            R.id.nav_tools -> {
-                loadFilterFragment()
-
-            }
-            R.id.nav_share -> {
-
+            R.id.logout -> {
+                LogOutUser()
+                item.setChecked(true)
             }
 
         }
@@ -118,6 +158,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout = findViewById(R.id.drawer_layout)
 
         navView= findViewById(R.id.nav_view)
+
+        bottomNavigation=findViewById(R.id.navigationView)
     }
 
     // utility instance
@@ -145,5 +187,116 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun loadFilterFragment(){
         val filter:Filter = Filter.newInstance()
         utility.loadFragment(fragmentManager,filter,false)
+    }
+
+    private fun loadFavFragment(){
+        val fav = FavCollection.newInstance()
+        utility.loadFragment(fragmentManager,fav,false)
+    }
+
+
+    // loading profile frgament
+    private fun loadingProfileFragment(){
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val profile = charnpreet.movie_world.fragments.Profile.Profile.newInstance()
+        utility.loadFragment(fragmentManager,profile,false)
+    }
+
+
+    //
+    //
+    private fun LogOutUser(){
+
+    val sessionID = utility.RetrivingDataFromSharedPreferences(utility.SESSION_ID_TAG, this)
+        if(sessionID!=null){
+            try {
+
+                val dilogBuilder = utility.getCustomAlertDialogBuilder("","Logging You out", false
+                    , this)
+             val dialog =  dilogBuilder.create()
+                dialog.show()
+                API.search_In_Movies().LogOut(Movie_db_config.API_KEY, sessionID).enqueue(object: Callback<DeleteSession> {
+                    override fun onFailure(call: Call<DeleteSession>?, t: Throwable?) {
+                        Log.i("hello", "fail to log out")
+                        dialog.dismiss()
+                    }
+
+                    override fun onResponse(call: Call<DeleteSession>?, response: Response<DeleteSession>?) {
+                        val logout = response!!.body()
+                        if(logout.success){
+
+                            utility.clearSharedPreferences(applicationContext, true,"")
+                            dialog.dismiss()
+
+                        }
+                    }
+
+                })
+
+            }catch (ex:Exception){
+
+                Log.i("hello", "we encounter a problem Please try again later")
+
+            }
+        }else{
+            CreateAlertBox(utility.LOG_OUT_TEXT,utility.SIGN_IN_BUTTON_TEXT)
+        }
+
+
+    }
+
+    fun CreateAlertBox(text:String,buttonText:String){
+        val dilogBuilder = utility.getCustomAlertDialogBuilder("",text, false
+            , this)
+        dilogBuilder.setPositiveButton(buttonText ,this)
+        dilogBuilder.setNegativeButton(utility.CANCEL_BUTTON_TEXT, this)
+        dilogBuilder.create().show()
+    }
+
+
+    private fun bottomNavigationListner(): BottomNavigationView.OnNavigationItemSelectedListener{
+        val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> {
+                    load_home_screen_Fragment()
+                    it.setChecked(true)
+
+                }
+                R.id.search -> {
+                    loading_user_search_screen()
+                    it.setChecked(true)
+
+                }
+                R.id.profile -> {
+
+                    loadingProfileFragment()
+                    it.setChecked(true)
+                }
+                R.id.fav -> {
+                    loadFavFragment()
+                    it.setChecked(true)
+
+                }
+                R.id.logout -> {
+                    it.setChecked(true)
+                }
+
+            }
+            false
+        }
+        return mOnNavigationItemSelectedListener
+    }
+
+    // alert dilog button click
+    override fun onClick(p0: DialogInterface?, p1: Int) {
+        if(DialogInterface.BUTTON_POSITIVE==p1){
+
+            loadingProfileFragment()
+
+        }else{
+
+            p0!!.dismiss()
+        }
+
     }
 }
