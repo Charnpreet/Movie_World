@@ -10,20 +10,13 @@ import charnpreet.movie_world.R
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.utility.utility
 import charnpreet.movie_world.adapter.topRated.Home_Screen_Movies_adapter
+import charnpreet.movie_world.utility.ConstantProvider
 
 //
 // this class will act as holder to holder list adaptera
 // besically it will present verticall list and each item of list can scroll horizontally
 //
 class Home_screen_adapter(private val movies: MutableMap<Int, List<Movies>?>): RecyclerView.Adapter<Home_screen_adapter.Home_screen_view_holder>() {
-
-    val TOP_RATED_MOVIES       = "Top Rated Movies"
-    val POPULAR_MOVIES         =  "Popular Movies"
-    val UPCOMING_MOVIES        =  "Upcomming Movies"
-    val NOW_PLAYING_MOVIES     =  "Now Playing Movies"
-
-    val NO_OF_CATOGORIES_TO_DISPLAY_ON_HOME_SCREEN = 4
-
 
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
     lateinit var view:View
@@ -37,7 +30,7 @@ class Home_screen_adapter(private val movies: MutableMap<Int, List<Movies>?>): R
 
     override fun getItemCount(): Int {
 
-            return NO_OF_CATOGORIES_TO_DISPLAY_ON_HOME_SCREEN
+            return ConstantProvider.NO_OF_CATOGORIES_TO_DISPLAY_ON_HOME_SCREEN
     }
 
     override fun onBindViewHolder(p0: Home_screen_view_holder, p1: Int) {
@@ -50,25 +43,25 @@ class Home_screen_adapter(private val movies: MutableMap<Int, List<Movies>?>): R
         }
         if(p1==0){
 
-            p0.textView.setText(TOP_RATED_MOVIES)
+            p0.textView.setText(ConstantProvider.TITLE_TOP_RATED_MOVIES)
             p0.recyclerView.adapter =
-                Home_Screen_Movies_adapter(movies[utility.TOP_RATED_MOVIES], view.context)
+                Home_Screen_Movies_adapter(movies[ConstantProvider.TOP_RATED_MOVIES], view.context)
 
         }
         if(p1==1){
-            p0.textView.setText(POPULAR_MOVIES)
+            p0.textView.setText(ConstantProvider.TITLE_POPULAR_MOVIES)
            p0.recyclerView.adapter =
-               Home_Screen_Movies_adapter(movies[utility.POPULAR_MOVIES], view.context)
+               Home_Screen_Movies_adapter(movies[ConstantProvider.POPULAR_MOVIES], view.context)
         }
         if(p1==2){
-            p0.textView.setText(UPCOMING_MOVIES)
+            p0.textView.setText(ConstantProvider.TITLE_UPCOMING_MOVIES)
           p0.recyclerView.adapter =
-              Home_Screen_Movies_adapter(movies[utility.UPCOMING_MOVIES], view.context)
+              Home_Screen_Movies_adapter(movies[ConstantProvider.UPCOMING_MOVIES], view.context)
         }
         if(p1==3){
-            p0.textView.setText(NOW_PLAYING_MOVIES)
+            p0.textView.setText(ConstantProvider.TITLE_NOW_PLAYING_MOVIES)
             p0.recyclerView.adapter =
-                Home_Screen_Movies_adapter(movies[utility.NOW_PLAYING_MOVIES], view.context)
+                Home_Screen_Movies_adapter(movies[ConstantProvider.NOW_PLAYING_MOVIES], view.context)
         }
 
     }

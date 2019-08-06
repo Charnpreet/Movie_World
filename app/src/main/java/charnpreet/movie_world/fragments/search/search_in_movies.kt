@@ -23,6 +23,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class search_in_movies : Fragment(){
+
+
+
     lateinit var  v : View
     lateinit var recyclerView_for_search_movies: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -44,12 +47,12 @@ class search_in_movies : Fragment(){
     }
 
     private fun init(){
-
         search_view = v.findViewById(R.id.searchview_for_search_Movie)
         // progress bar instancian can be moved to utility class
         progressbar = v.findViewById(R.id.pbHeaderProgress)
         progressbar.setVisibility(View.INVISIBLE)
         init_recylerview()
+
         setingup_listeners()
 
 
@@ -64,15 +67,21 @@ class search_in_movies : Fragment(){
     }
 
     private fun setingup_listeners(){
+
+
         search_view.setOnQueryTextListener(object :android.widget.SearchView.OnQueryTextListener{
            override fun onQueryTextSubmit(query:String):Boolean{
                progressbar.setVisibility(View.VISIBLE)
-               fetech_searchView_data(query)
 
+               fetech_searchView_data(query)
                return false
            }
 
-            override fun onQueryTextChange(p0: String?): Boolean {
+            override fun onQueryTextChange(query: String?): Boolean {
+                if(query!!.isNotEmpty()){
+                    recyclerView_for_search_movies.adapter = NoResult("")
+                }
+
                 return false
             }
         })
@@ -89,8 +98,7 @@ class search_in_movies : Fragment(){
             Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>?, response: Response<MoviesResponse>?) {
                 if(call!=null){
-                        val  movies: List<Movies>? = response!!.body().results
-
+                    val  movies: List<Movies>? = response!!.body().results
                     if (movies!!.isNotEmpty()){
                         recyclerView_for_search_movies.adapter =
                             display_movie_adapter(
@@ -116,14 +124,9 @@ class search_in_movies : Fragment(){
                 progressbar.visibility = View.INVISIBLE
 
             }
-
-
         })
 
     }
-
-
-
 }
 
 

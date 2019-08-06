@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import charnpreet.movie_world.R
 import charnpreet.movie_world.adapter.Sumarry.ContentSummaryAdapter
 import charnpreet.movie_world.model.Movies
+import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
 import java.io.Serializable
 
@@ -49,7 +50,7 @@ class ContentSummary : Fragment() {
 
         val args =arguments
 
-        val Bmovie: Movies = args!!.get(utility.MOVIE_TAG) as Movies
+        val Bmovie: Movies = args!!.get(ConstantProvider.MOVIE_TAG) as Movies
 
         movie = Bmovie
     }

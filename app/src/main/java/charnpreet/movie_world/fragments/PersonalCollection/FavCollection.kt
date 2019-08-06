@@ -22,6 +22,7 @@ import charnpreet.movie_world.adapter.topRated.Home_Screen_Movies_adapter
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.ConstantProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,9 +35,7 @@ class FavCollection :Fragment(), DialogInterface.OnClickListener{
     lateinit var recyclerView: RecyclerView
     private lateinit var progressbar: ProgressBar
     private lateinit var progressBarTextView: TextView
-    private val LOADING_FAV_MOVIE_COLLECTION ="Loading Fav Movie Collection"
-    private val EMPTY_FAV_LIST_TEXT ="OPPS! List is Empty"
-    private val NOT_LOGGED_IN_TEXT = "You are Not Logged In"
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fav_collection, container, false)
         Init()
@@ -53,7 +52,7 @@ private fun Init(){
     progressbar = v.findViewById(R.id.pbHeaderProgress)
     progressBarTextView = v.findViewById(R.id.progressBarTextView)
     progressbar.setVisibility(View.VISIBLE)
-    progressBarTextView.setText(LOADING_FAV_MOVIE_COLLECTION)
+    progressBarTextView.setText(ConstantProvider.LOADING_FAV_MOVIE_COLLECTION)
     init_recylerView()
     getfavMovieList()
 }
@@ -74,8 +73,8 @@ private fun Init(){
     // if matches will set fav movie swtich to on else it will remain off
     private fun getfavMovieList(){
 
-        val sessionID = utility.RetrivingDataFromSharedPreferences(utility.SESSION_ID_TAG, v.context)
-        val profileID = utility.RetrivingDataFromSharedPreferences(utility.PROFILE_ID_TAG, v.context)
+        val sessionID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.SESSION_ID_TAG, v.context)
+        val profileID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.PROFILE_ID_TAG, v.context)
         if(sessionID!=null){
 
             API.search_In_Movies().getFavMovies(profileID, Movie_db_config.API_KEY, sessionID).enqueue(object :
@@ -93,7 +92,7 @@ private fun Init(){
                     if(movies!!.size>0){
                         recyclerView.adapter = Home_Screen_Movies_adapter(movies, v.context)
                     }else{
-                        recyclerView.adapter = NoResult(EMPTY_FAV_LIST_TEXT )
+                        recyclerView.adapter = NoResult(ConstantProvider.EMPTY_FAV_LIST_TEXT )
                     }
 
 
@@ -104,14 +103,14 @@ private fun Init(){
             progressbar.setVisibility(View.INVISIBLE)
             progressBarTextView.visibility = View.INVISIBLE
 
-            CreateAlertBox(NOT_LOGGED_IN_TEXT,utility.SIGN_IN_BUTTON_TEXT)
+            CreateAlertBox(ConstantProvider.NOT_LOGGED_IN_TEXT,ConstantProvider.SIGN_IN_BUTTON_TEXT)
         }
     }
     fun CreateAlertBox(text:String,buttonText:String){
         val dilogBuilder = utility.getCustomAlertDialogBuilder("",text, false
             , v.context)
         dilogBuilder.setPositiveButton(buttonText ,this)
-        dilogBuilder.setNegativeButton(utility.CANCEL_BUTTON_TEXT, this)
+        dilogBuilder.setNegativeButton(ConstantProvider.CANCEL_BUTTON_TEXT, this)
         dilogBuilder.create().show()
     }
 
@@ -136,7 +135,7 @@ private fun Init(){
 
             p0!!.dismiss()
 
-            recyclerView.adapter = NoResult(NOT_LOGGED_IN_TEXT)
+            recyclerView.adapter = NoResult(ConstantProvider.NOT_LOGGED_IN_TEXT)
         }
     }
 

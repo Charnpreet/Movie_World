@@ -27,6 +27,7 @@ import charnpreet.movie_world.fragments.home.home_screen
 import charnpreet.movie_world.fragments.search.search_in_movies
 import charnpreet.movie_world.model.DeleteSession
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        init_variables();
+        init_variables()
         setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
@@ -136,6 +137,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 item.setChecked(true)
 
             }
+            R.id.filter->{
+                loadFilterFragment()
+                item.setChecked(true)
+            }
             R.id.logout -> {
                 LogOutUser()
                 item.setChecked(true)
@@ -207,7 +212,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     //
     private fun LogOutUser(){
 
-    val sessionID = utility.RetrivingDataFromSharedPreferences(utility.SESSION_ID_TAG, this)
+    val sessionID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.SESSION_ID_TAG, this)
         if(sessionID!=null){
             try {
 
@@ -239,7 +244,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
         }else{
-            CreateAlertBox(utility.LOG_OUT_TEXT,utility.SIGN_IN_BUTTON_TEXT)
+            CreateAlertBox(ConstantProvider.LOG_OUT_TEXT,ConstantProvider.SIGN_IN_BUTTON_TEXT)
         }
 
 
@@ -249,7 +254,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val dilogBuilder = utility.getCustomAlertDialogBuilder("",text, false
             , this)
         dilogBuilder.setPositiveButton(buttonText ,this)
-        dilogBuilder.setNegativeButton(utility.CANCEL_BUTTON_TEXT, this)
+        dilogBuilder.setNegativeButton(ConstantProvider.CANCEL_BUTTON_TEXT, this)
         dilogBuilder.create().show()
     }
 
