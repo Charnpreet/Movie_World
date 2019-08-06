@@ -21,6 +21,7 @@ import charnpreet.movie_world.utility.utility
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.MoviesResponse
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.ConstantProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,7 +36,7 @@ class home_screen: Fragment() {
     private lateinit var progressbar: ProgressBar
     private lateinit var progressBarTextView: TextView
     private var loaded :Boolean = true
-    private val UNABLE_TO_LOAD_MOVIES ="Unable To Load Movies"
+
     companion object{
         fun newInstance(): home_screen {
             return home_screen()
@@ -79,27 +80,27 @@ private fun init(){
     private fun load_TopRated_Movies(){
 
         val call: Call<MoviesResponse>? = API.search_In_Movies().topRated(Movie_db_config.API_KEY, utility.country,utility.languages)
-        progressBarTextView.setText(utility.NOW_LOADING_TOP_RATED_MOVIES)
+        progressBarTextView.setText(ConstantProvider.NOW_LOADING_TOP_RATED_MOVIES)
         // passing next method to be called
-        loadMovieCategories(call, utility.TOP_RATED_MOVIES, ::load_Popular_movies)
+        loadMovieCategories(call, ConstantProvider.TOP_RATED_MOVIES, ::load_Popular_movies)
 
     }
 
     private fun load_Popular_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().popularMovies(Movie_db_config.API_KEY,utility.country, utility.languages)
-        progressBarTextView.setText(utility.NOW_LOADING_TOP_POPULAR_MOVIES)
-        loadMovieCategories(call, utility.POPULAR_MOVIES, ::load_Now_Playing_movies)
+        progressBarTextView.setText(ConstantProvider.NOW_LOADING_TOP_POPULAR_MOVIES)
+        loadMovieCategories(call, ConstantProvider.POPULAR_MOVIES, ::load_Now_Playing_movies)
 
     }
     private fun load_Now_Playing_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().nowPlaying(Movie_db_config.API_KEY, utility.country, utility.languages) //IN for india
-        progressBarTextView.setText(utility.LOADING_NOW_PLAYING_MOVIES)
-        loadMovieCategories(call, utility.NOW_PLAYING_MOVIES, ::load_Upcoming_movies)
+        progressBarTextView.setText(ConstantProvider.LOADING_NOW_PLAYING_MOVIES)
+        loadMovieCategories(call, ConstantProvider.NOW_PLAYING_MOVIES, ::load_Upcoming_movies)
     }
     private fun load_Upcoming_movies(){
         val call: Call<MoviesResponse>? = API.search_In_Movies().upComing(Movie_db_config.API_KEY, utility.country, utility.languages)
-        progressBarTextView.setText(utility.NOW_LOADING_UPCOMING_MOVIES)
-        loadMovieCategories(call, utility.UPCOMING_MOVIES, ::loadAdapters)
+        progressBarTextView.setText(ConstantProvider.NOW_LOADING_UPCOMING_MOVIES)
+        loadMovieCategories(call, ConstantProvider.UPCOMING_MOVIES, ::loadAdapters)
     }
 
 
@@ -121,7 +122,7 @@ private fun init(){
 
             override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
 
-                recyclerView.adapter = NoResult(UNABLE_TO_LOAD_MOVIES)
+                recyclerView.adapter = NoResult(ConstantProvider.UNABLE_TO_LOAD_MOVIES)
                 Log.i("hello", t!!.message)
 
                 progressbar.setVisibility(View.INVISIBLE)
@@ -175,14 +176,14 @@ private fun init(){
 
     fun loadNoResultAdapter() {
 
-        recyclerView.adapter =  NoResult(UNABLE_TO_LOAD_MOVIES)
+        recyclerView.adapter =  NoResult(ConstantProvider.UNABLE_TO_LOAD_MOVIES)
     }
 
     fun RetrivingDataFromSharedPreferences(){
 
-        val sharedPreference =  v.context.getSharedPreferences(utility.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-        val country = sharedPreference.getString(utility.COUNTRY_TEXT,"")
-        val language = sharedPreference.getString(utility.LANGUAGE_TEXT,"")
+        val sharedPreference =  v.context.getSharedPreferences(ConstantProvider.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val country = sharedPreference.getString(ConstantProvider.COUNTRY_TEXT,"")
+        val language = sharedPreference.getString(ConstantProvider.LANGUAGE_TEXT,"")
         if(country!=null){
             utility.country = country
         }

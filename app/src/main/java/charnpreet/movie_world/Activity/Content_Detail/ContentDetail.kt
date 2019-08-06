@@ -23,6 +23,7 @@ import charnpreet.movie_world.movie_db_connect.API
 import charnpreet.movie_world.utility.utility
 import charnpreet.movie_world.model.FavBody
 import charnpreet.movie_world.model.MoviesResponse
+import charnpreet.movie_world.utility.ConstantProvider
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,7 +39,6 @@ class ContentDetail : AppCompatActivity(), View.OnClickListener, DialogInterface
     private lateinit var tabLayout : TabLayout
     private lateinit var favSwitch :Switch
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
-    private val OK = "ok"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,9 +91,9 @@ class ContentDetail : AppCompatActivity(), View.OnClickListener, DialogInterface
     //
     //
     private fun AddToFavMovieCollection(add:Boolean){
-        val favMovie = FavBody(utility.MOVIE_TYPE_MEDIA,movie.id as Int, add)
-        val sessionID = utility.RetrivingDataFromSharedPreferences(utility.SESSION_ID_TAG, this)
-        val profileID = utility.RetrivingDataFromSharedPreferences(utility.PROFILE_ID_TAG, this)
+        val favMovie = FavBody(ConstantProvider.MOVIE_TYPE_MEDIA,movie.id as Int, add)
+        val sessionID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.SESSION_ID_TAG, this)
+        val profileID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.PROFILE_ID_TAG, this)
         if(sessionID!= null){
             API.search_In_Movies().addToFav(favMovie, profileID, Movie_db_config.API_KEY, sessionID).enqueue(object :Callback<FavAddedSuccessFully>{
                 override fun onFailure(call: Call<FavAddedSuccessFully>?, t: Throwable?) {
@@ -101,13 +101,13 @@ class ContentDetail : AppCompatActivity(), View.OnClickListener, DialogInterface
                 }
 
                 override fun onResponse(call: Call<FavAddedSuccessFully>?, response: Response<FavAddedSuccessFully>?) {
-                    Log.i("hello", "successfully added")
-                    Log.i("hello", response!!.body().toString())
+//                    Log.i("hello", "successfully added")
+//                    Log.i("hello", response!!.body().toString())
                 }
 
             })
         }else{
-            CreateAlertBox(utility.NOT_LOGGED_IN_TEXT,OK)
+            CreateAlertBox(ConstantProvider.NOT_LOGGED_IN_TEXT, ConstantProvider.OK)
         }
 
     }
@@ -116,8 +116,8 @@ class ContentDetail : AppCompatActivity(), View.OnClickListener, DialogInterface
         // if matches will set fav movie swtich to on else it will remain off
         private fun getfavMovieList(){
 
-            val sessionID = utility.RetrivingDataFromSharedPreferences(utility.SESSION_ID_TAG, this)
-            val profileID = utility.RetrivingDataFromSharedPreferences(utility.PROFILE_ID_TAG, this)
+            val sessionID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.SESSION_ID_TAG, this)
+            val profileID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.PROFILE_ID_TAG, this)
             if(sessionID!=null){
                 API.search_In_Movies().getFavMovies(profileID, Movie_db_config.API_KEY, sessionID).enqueue(object :Callback<MoviesResponse>{
                     override fun onFailure(call: Call<MoviesResponse>?, t: Throwable?) {
@@ -172,7 +172,7 @@ class ContentDetail : AppCompatActivity(), View.OnClickListener, DialogInterface
 
     private fun ExtractBundle(){
 
-        val Bmovie: Movies = intent?.extras?.getBundle(utility.MOVIE_TAG)!!.getSerializable(utility.MOVIE_TAG)as Movies
+        val Bmovie: Movies = intent?.extras?.getBundle(ConstantProvider.MOVIE_TAG)!!.getSerializable(ConstantProvider.MOVIE_TAG)as Movies
         movie = Bmovie
     }
 

@@ -31,33 +31,6 @@ import retrofit2.Response
 class utility{
 
     //
-    // constant been used inside different actvities and fragments
-    val TOP_RATED_MOVIES   = 0
-    val POPULAR_MOVIES     = 1
-    val UPCOMING_MOVIES    = 2
-    val NOW_PLAYING_MOVIES = 3
-    val SESSION_ID_TAG = "sessionId"
-    val PROFILE_ID_TAG = "profileId"
-    val MOVIE_TAG = "movie"
-    val MOVIE_TYPE_MEDIA = "movie"
-    val SIGN_IN_BUTTON_TEXT ="Sign In"
-    val CANCEL_BUTTON_TEXT = "Cancel"
-    val LOG_OUT_TEXT = "Your are Already Logged Out "
-    val VIEW_PAGER_TAB_SUMMARY ="SUMMARY"
-    val VIEW_PAGER_TAB_REVIEWS ="REVIEWS"
-    val VIEW_PAGER_TAB_VIDEO ="VIDEO"
-    val LOADING_COUNTRIES_TEXT = "loading Countries"
-    val LOADING_LANGUAGES_TEXT = "loading languages"
-    val COUNTRY_TEXT = "country"
-    val LANGUAGE_TEXT  ="language"
-    val SHARED_PREFERENCE_NAME="PREFERENCE_NAME"
-    val NOW_LOADING_TOP_RATED_MOVIES="Now loading Top Rated Movies"
-    val NOW_LOADING_TOP_POPULAR_MOVIES="Now loading Top Popular Movies"
-    val LOADING_NOW_PLAYING_MOVIES="loading Now Playing Movies"
-    val NOW_LOADING_UPCOMING_MOVIES="Now loading Upcoming Movies"
-    val LOADING_ACCOUNT_DETAILS="Loading Account Details"
-    val NOT_LOGGED_IN_TEXT = "You are Not Logged In"
-    //
     //
     companion object{
         val utility_instance =utility()
@@ -134,7 +107,7 @@ class utility{
     // this method is been used to clear either all phreferences or specific
     // based on user slection
     fun clearSharedPreferences(context: Context, removeAll:Boolean, tag:String){
-        val sharedPreference =  context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val sharedPreference =  context.getSharedPreferences(ConstantProvider.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
         if(removeAll){
             sharedPreference.edit().clear().apply()
 
@@ -147,7 +120,7 @@ class utility{
 
     // fetech data from shared Preferences
     fun RetrivingDataFromSharedPreferences(tag:String, context: Context):String?{
-        val sharedPreference =  context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val sharedPreference =  context.getSharedPreferences(ConstantProvider.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
         val _token = sharedPreference.getString(tag,null)
         return _token
     }

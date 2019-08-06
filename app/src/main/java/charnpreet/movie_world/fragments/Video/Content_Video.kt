@@ -17,6 +17,7 @@ import charnpreet.movie_world.model.ContentVideo
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.VideoDetails
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,7 +36,6 @@ class Content_Video : Fragment() {
 
     private lateinit var progressbar: ProgressBar
 
-    val NO_TRAILER_FOUND_TEXT ="No Trailer Found"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -67,7 +67,7 @@ class Content_Video : Fragment() {
 
         val args =arguments
 
-        val Bmovie: Movies = args!!.get(utility.MOVIE_TAG) as Movies
+        val Bmovie: Movies = args!!.get(ConstantProvider.MOVIE_TAG) as Movies
 
         movie = Bmovie
     }
@@ -101,7 +101,7 @@ class Content_Video : Fragment() {
 
                     }else{
 
-                        recyclerView.adapter = NoResult(NO_TRAILER_FOUND_TEXT)
+                        recyclerView.adapter = NoResult(ConstantProvider.NO_TRAILER_FOUND_TEXT)
                     }
 
                 }

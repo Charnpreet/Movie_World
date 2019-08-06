@@ -14,6 +14,7 @@ import charnpreet.movie_world.R
 import charnpreet.movie_world.model.Countries
 import charnpreet.movie_world.model.MovieLanguages
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,7 +67,6 @@ class Filter: Fragment(), View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-       Log.i("hello", "Your Preference has been saved")
 
         if((languageSpinner.selectedItemPosition !=0)|| (countriesSpinner.selectedItemPosition!=0)){
             if(languageSpinner.selectedItemPosition !=0){
@@ -97,7 +97,7 @@ class Filter: Fragment(), View.OnClickListener {
             // saving data to shared preferences
             savingValuesToSharedPreferences()
         }else{
-            Toast.makeText(v.context, "Please Select An Item From Spinner", Toast.LENGTH_LONG).show()
+            Toast.makeText(v.context, ConstantProvider.PLEASE_SELECT_AN_ITEM_FROM_SPINNER, Toast.LENGTH_LONG).show()
         }
 
 
@@ -109,7 +109,7 @@ class Filter: Fragment(), View.OnClickListener {
     }
 
         private fun loadCountries(){
-            progressBarTextView.setText(utility.LOADING_COUNTRIES_TEXT)
+            progressBarTextView.setText(ConstantProvider.LOADING_COUNTRIES_TEXT)
         val call: Call<Array<Countries>> = API.search_In_Movies().countries(Movie_db_config.API_KEY)
         call.enqueue(object : Callback<Array<Countries>> {
             override fun onResponse(call: Call<Array<Countries>>?, response: Response<Array<Countries>>?) {
@@ -128,7 +128,7 @@ class Filter: Fragment(), View.OnClickListener {
     }
 
     private fun loadLanguages(){
-        progressBarTextView.setText(utility.LOADING_LANGUAGES_TEXT)
+        progressBarTextView.setText(ConstantProvider.LOADING_LANGUAGES_TEXT)
         val call: Call<Array<MovieLanguages>> = API.search_In_Movies().languages(Movie_db_config.API_KEY)
         call.enqueue(object : Callback<Array<MovieLanguages>>{
 
@@ -157,7 +157,7 @@ class Filter: Fragment(), View.OnClickListener {
 
         val languageName: MutableList<String> = mutableListOf()
 
-        languageName.add("Please Select Language")
+        languageName.add(ConstantProvider.SELECT_YOUR_LANGAUAGE)
 
         for( lan in languages){
 
@@ -165,7 +165,7 @@ class Filter: Fragment(), View.OnClickListener {
         }
         val countryName:MutableList<String> = mutableListOf()
 
-        countryName.add("Please Select Country")
+        countryName.add(ConstantProvider.SELECT_YOUR_COUNTRY)
 
         for(country:Countries in countries){
 
@@ -199,17 +199,17 @@ class Filter: Fragment(), View.OnClickListener {
 
     private fun savingValuesToSharedPreferences(){
 
-        val sharedPreference =  v.context.getSharedPreferences(utility.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val sharedPreference =  v.context.getSharedPreferences(ConstantProvider.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
 
         val editor = sharedPreference.edit()
 
-        editor.putString(utility.COUNTRY_TEXT,utility.country)
+        editor.putString(ConstantProvider.COUNTRY_TEXT,utility.country)
 
-        editor.putString(utility.LANGUAGE_TEXT,utility.languages)
+        editor.putString(ConstantProvider.LANGUAGE_TEXT,utility.languages)
 
         editor.apply()
 
-        Toast.makeText(v.context, "Your Preference has been saved", Toast.LENGTH_LONG).show()
+        Toast.makeText(v.context, ConstantProvider.YOUR_PREFERENCE_HAS_BEEN_SAVED, Toast.LENGTH_LONG).show()
     }
 
 

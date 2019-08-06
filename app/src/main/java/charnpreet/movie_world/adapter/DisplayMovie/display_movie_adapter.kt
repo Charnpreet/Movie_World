@@ -16,6 +16,7 @@ import charnpreet.movie_world.R
 import charnpreet.movie_world.model.Movies
 import com.squareup.picasso.Picasso
 import charnpreet.movie_world.Activity.Content_Detail.ContentDetail
+import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
 import java.io.Serializable
 
@@ -67,8 +68,8 @@ class display_movie_adapter(private var movies: List<Movies>?, lrowLayout: Int, 
     private fun loadContentDetailActivity(movie : Movies){
         val intent = Intent(view.context, ContentDetail::class.java)
         val bundle = Bundle()
-        bundle.putSerializable(utility.MOVIE_TAG, movie as Serializable)
-        intent.putExtra(utility.MOVIE_TAG, bundle)
+        bundle.putSerializable(ConstantProvider.MOVIE_TAG, movie as Serializable)
+        intent.putExtra(ConstantProvider.MOVIE_TAG, bundle)
         view.context.startActivity(intent)
     }
 

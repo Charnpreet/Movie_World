@@ -14,6 +14,7 @@ import charnpreet.movie_world.Activity.Content_Detail.ContentDetail
 import charnpreet.movie_world.Configuration.Movie_db_config
 import charnpreet.movie_world.R
 import charnpreet.movie_world.model.Movies
+import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
 import com.squareup.picasso.Picasso
 import java.io.Serializable
@@ -51,8 +52,6 @@ class Home_Screen_Movies_adapter(movies: List<Movies>?, context:Context):Recycle
         //
         p0.imageView.setOnClickListener(View.OnClickListener {
 
-            Log.i("hello","you clicked an image of a Movie " +movies!![p1].title);
-
             loadContentDetailActivity(movies!![p1])
 
         })
@@ -62,8 +61,8 @@ class Home_Screen_Movies_adapter(movies: List<Movies>?, context:Context):Recycle
     private fun loadContentDetailActivity(movie : Movies){
         val intent =Intent(view.context,ContentDetail::class.java)
         val bundle = Bundle()
-        bundle.putSerializable(utility.MOVIE_TAG, movie as Serializable)
-        intent.putExtra(utility.MOVIE_TAG, bundle)
+        bundle.putSerializable(ConstantProvider.MOVIE_TAG, movie as Serializable)
+        intent.putExtra(ConstantProvider.MOVIE_TAG, bundle)
         view.context.startActivity(intent)
     }
 

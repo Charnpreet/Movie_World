@@ -18,6 +18,7 @@ import charnpreet.movie_world.model.Content_Review
 import charnpreet.movie_world.model.Movies
 import charnpreet.movie_world.model.reviewDetails
 import charnpreet.movie_world.movie_db_connect.API
+import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,7 +33,7 @@ class ContentReview : Fragment() {
     val utility: utility = charnpreet.movie_world.utility.utility.utility_instance
     private lateinit var progressbar: ProgressBar
     lateinit var recyclerView: RecyclerView
-    val NO_REVIEW_FOUND ="No Reviews Found"
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         v = inflater.inflate(R.layout.recyler_view,container,false)
@@ -61,7 +62,7 @@ class ContentReview : Fragment() {
 
         val args =arguments
 
-        val Bmovie: Movies = args!!.get(utility.MOVIE_TAG) as Movies
+        val Bmovie: Movies = args!!.get(ConstantProvider.MOVIE_TAG) as Movies
 
         movie = Bmovie
     }
@@ -111,7 +112,7 @@ class ContentReview : Fragment() {
                     }
 
                     else{
-                        recyclerView.adapter = NoResult(NO_REVIEW_FOUND)
+                        recyclerView.adapter = NoResult(ConstantProvider.NO_REVIEW_FOUND)
                     }
 
 
