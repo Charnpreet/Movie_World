@@ -17,12 +17,17 @@
                 android:icon="@drawable/baseline_account_box_black_18dp"
                 android:title="@string/menu_slideshow"/>
         <item
-                android:id="@+id/fav"
+                android:id="@+id/filter"
                 android:icon="@drawable/filter"
+                android:title="filter"/>
+
+        <item
+                android:id="@+id/fav"
+                android:icon="@drawable/fav"
                 android:title="fav"/>
         <item
                 android:id="@+id/logout"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@android:drawable/ic_lock_power_off"
                 android:title="@string/menu_share"/>
 
     </group>
