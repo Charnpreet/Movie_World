@@ -25,8 +25,13 @@
 8. log out is to  log you out from your account
 9. Profile section is used to fetech user profile data from tmbd. ATOM it diplay user name and name
 
-*************** later images and demo will be added**********
-
+*************** Screen shots**********
+![Screenshot_1566522860](https://user-images.githubusercontent.com/29935876/63631863-24f23280-c670-11e9-9f4b-1929bfad6546.png)
+![Screenshot_1566522965](https://user-images.githubusercontent.com/29935876/63631847-f1170d00-c66f-11e9-9019-2941f5abdec3.png)
+![Screenshot_1566522938](https://user-images.githubusercontent.com/29935876/63631854-0d1aae80-c670-11e9-8192-6ba0afb2162a.png)
+![Screenshot_1566616354](https://user-images.githubusercontent.com/29935876/63631912-f9237c80-c670-11e9-8828-b2ad16ab7136.png)
+![Screenshot_1566616346](https://user-images.githubusercontent.com/29935876/63631918-faed4000-c670-11e9-8e7b-ab7edc214648.png)
+![Screenshot_1566616333](https://user-images.githubusercontent.com/29935876/63631925-fcb70380-c670-11e9-8fd6-72f2173a854f.png)
 
 ****************whats used *************************
 * Kotlin
