@@ -26,6 +26,7 @@ import charnpreet.movie_world.fragments.PersonalCollection.FavCollection
 import charnpreet.movie_world.fragments.home.home_screen
 import charnpreet.movie_world.fragments.search.search_in_movies
 import charnpreet.movie_world.model.DeleteSession
+import charnpreet.movie_world.model.Profile
 import charnpreet.movie_world.movie_db_connect.API
 import charnpreet.movie_world.utility.ConstantProvider
 import charnpreet.movie_world.utility.utility
@@ -40,9 +41,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+    lateinit var userName : TextView
+    lateinit var email :TextView
     private lateinit var bottomNavigation: BottomNavigationView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         init_variables()
@@ -67,6 +71,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+
+        // updating navigaion drawer headers
+        HeadView()
+
+
         val redirectUri :Uri? = getIntent().getData()
 
         if(redirectUri!=null){
@@ -212,7 +221,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     //
     private fun LogOutUser(){
 
-    val sessionID = utility.RetrivingDataFromSharedPreferences(ConstantProvider.SESSION_ID_TAG, this)
+    val sessionID = GetSessionID()
         if(sessionID!=null){
             try {
 
@@ -303,5 +312,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             p0!!.dismiss()
         }
 
+    }
+    //
+    // this will fetech session id
+    private fun GetSessionID():String?{
+        return utility.RetrivingDataFromSharedPreferences(ConstantProvider.SESSION_ID_TAG, this)
+    }
+
+    // updating navigation header
+    private fun HeadView(){
+        val navDraweView = navView.getHeaderView(0)
+        userName = navDraweView.findViewById(R.id.navi_Drawer_username)
+        email = navDraweView.findViewById(R.id.navi_Drawer_email)
+        val sessionID = GetSessionID()
+        if(sessionID!=null){
+            LogginDetails(sessionID)
+        }else{
+            userName.setText("")
+            email.setText("")
+        }
+
+    }
+
+
+    private fun LogginDetails(sessionID:String){
+            API.search_In_Movies().AccountDetails(Movie_db_config.API_KEY, sessionID).enqueue(object : Callback<Profile> {
+                override fun onResponse(call: Call<Profile>?, response: Response<Profile>?) {
+                    val profile = response!!.body()
+                    userName.setText(profile.name)
+                    email.setText(profile.username)
+
+                }
+                override fun onFailure(call: Call<Profile>?, t: Throwable?) {
+
+                    Log.i("hello", "unable to load prfile")
+
+                }
+            })
     }
 }
